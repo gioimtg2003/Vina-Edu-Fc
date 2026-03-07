@@ -7,8 +7,8 @@ Based on the architecture and UX brainstorm, here is the prioritized list of tas
   - Use `framer-motion` for dynamic tilt and glow effects on high-res flight controller PNG.
   - Build the layout with the dynamic HUD theme, data tickers, and micro-animations.
   - Implement the Prominent Download CTA flow with glowing borders.
-- [ ] **E-commerce & Booking Flow**
-  - Build the "Loadout Builder" wizard for buying components.
+- [/] **E-commerce & Booking Flow**
+  - Build the "Loadout Builder" wizard for buying components (with hardcoded Vietnamese products).
   - Implement the 1-on-1 Setup Booking flow with craft specs upload.
   - Create the Unified Account Dashboard for order history and tunes.
 - [ ] **Interactive Documentation**
