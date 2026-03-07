@@ -1,0 +1,6 @@
+{
+    "name": "@vinafc/api",
+    "version": "0.1.0",
+    "private": true,
+    "description": "NestJS backend API for VinaFlightControl"
+}

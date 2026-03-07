@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── Light mode (rarely used for aviation UI — provided for completeness) */
+    --background: 220 20% 97%;
+    --foreground: 220 25% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 10%;
+
+    --primary: 210 100% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 91%;
+    --secondary-foreground: 220 25% 15%;
+
+    --muted: 220 15% 93%;
+    --muted-foreground: 220 15% 46%;
+
+    --accent: 195 100% 50%;
+    --accent-foreground: 195 100% 8%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 210 100% 52%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* ── Dark mode — primary aviation / HUD theme */
+    --background: 220 28% 7%;
+    --foreground: 210 20% 92%;
+
+    --card: 220 25% 10%;
+    --card-foreground: 210 20% 92%;
+
+    --popover: 220 25% 9%;
+    --popover-foreground: 210 20% 92%;
+
+    /* Electric blue — HUD primary */
+    --primary: 210 100% 56%;
+    --primary-foreground: 220 28% 5%;
+
+    --secondary: 220 20% 16%;
+    --secondary-foreground: 210 20% 85%;
+
+    --muted: 220 20% 14%;
+    --muted-foreground: 220 15% 55%;
+
+    /* Neon cyan — radar / altitude accent */
+    --accent: 195 100% 50%;
+    --accent-foreground: 195 100% 8%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 20% 18%;
+    --input: 220 20% 16%;
+    --ring: 210 100% 56%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  /* HUD scanline overlay (optional, apply to cockpit panels) */
+  .hud-scanlines {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      hsl(195 100% 50% / 0.03) 2px,
+      hsl(195 100% 50% / 0.03) 4px
+    );
+  }
+}

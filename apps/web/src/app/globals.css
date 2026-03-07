@@ -1,0 +1,2 @@
+/* Import shared design tokens, Tailwind directives, and HUD CSS variables */
+@import '@vinauav/ui/globals.css';
