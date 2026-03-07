@@ -3,10 +3,10 @@
 Based on the architecture and UX brainstorm, here is the prioritized list of tasks to execute for Phase 2:
 
 ## 1. Web Ecosystem (`apps/web`)
-- [ ] **Implement the Interactive Landing Page & 3D Hero**
-  - Set up `three.js` or `@react-three/fiber` in `apps/web`.
-  - Build the layout with the dynamic HUD theme.
-  - Establish the brand identity and the download CTA flow.
+- [x] **Implement the Interactive Landing Page**
+  - Use `framer-motion` for dynamic tilt and glow effects on high-res flight controller PNG.
+  - Build the layout with the dynamic HUD theme, data tickers, and micro-animations.
+  - Implement the Prominent Download CTA flow with glowing borders.
 - [ ] **E-commerce & Booking Flow**
   - Build the "Loadout Builder" wizard for buying components.
   - Implement the 1-on-1 Setup Booking flow with craft specs upload.
