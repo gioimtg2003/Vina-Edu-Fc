@@ -1,0 +1,8 @@
+{
+    "name": "vinafc-web",
+    "compatibility_date": "2026-03-08",
+    "compatibility_flags": [
+        "nodejs_compat"
+    ],
+    "pages_build_output_dir": "apps/web/.vercel/output/static"
+}

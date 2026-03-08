@@ -484,3 +484,5 @@ dist/
 
 test_data
 :memory:
+
+.open-next
