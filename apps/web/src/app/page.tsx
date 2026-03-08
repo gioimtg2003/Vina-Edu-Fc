@@ -1,21 +1,104 @@
-import { Navbar } from '@/components/navbar'
-import { Hero } from '@/components/hero'
-import { About } from '@/components/about'
-import { LoadoutBuilder } from '@/components/loadout-builder'
-import { DownloadCTA } from '@/components/download-cta'
-import { Footer } from '@/components/footer'
+import HeroSection from "@/components/HeroSection";
+import AboutSection from "@/components/AboutSection";
+import FeaturesSection from "@/components/FeaturesSection";
+import EducationSection from "@/components/EducationSection";
+import PartnershipSection from "@/components/PartnershipSection";
+import ContactSection from "@/components/ContactSection";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
-export default function HomePage() {
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebSite",
+            "@id": "https://vinafc.vn/#website",
+            url: "https://vinafc.vn",
+            name: "VINA EDU FC",
+            description: "Vietnam's open-source ESP32 drone flight controller for education and research.",
+            inLanguage: ["vi", "en"],
+        },
+        {
+            "@type": "Organization",
+            "@id": "https://vinafc.vn/#organization",
+            name: "Vina Edu FC",
+            url: "https://vinafc.vn",
+            description: "Vietnamese drone technology company creating open-source flight controllers for education.",
+            foundingLocation: {
+                "@type": "Country",
+                name: "Vietnam",
+            },
+            areaServed: "Worldwide",
+            knowsAbout: [
+                "Drone flight controller",
+                "ESP32 microcontroller",
+                "Open source drone technology",
+                "UAV research platform",
+                "Educational robotics",
+            ],
+            contactPoint: {
+                "@type": "ContactPoint",
+                email: "quymom941478@gmail.com",
+                contactType: "customer support",
+                availableLanguage: ["Vietnamese", "English"],
+            },
+        },
+        {
+            "@type": "Product",
+            "@id": "https://vinafc.vn/#product",
+            name: "VINA EDU FC",
+            alternateName: ["Vina Edu Flight Controller", "ESP32 Drone Controller Vietnam"],
+            description:
+                "An open-source ESP32-based drone flight controller designed and built in Vietnam. Perfect for drone research, education, university labs, maker communities, and robotics engineers. Mạch điều khiển drone mã nguồn mở cho sinh viên và kỹ sư.",
+            brand: {
+                "@type": "Brand",
+                name: "VINA EDU FC",
+            },
+            manufacturer: {
+                "@type": "Organization",
+                name: "Vina Edu FC",
+                address: {
+                    "@type": "PostalAddress",
+                    addressCountry: "VN",
+                },
+            },
+            category: "Drone Flight Controller",
+            audience: {
+                "@type": "Audience",
+                audienceType: "Drone enthusiasts, robotics engineers, universities, maker communities",
+            },
+            offers: {
+                "@type": "Offer",
+                availability: "https://schema.org/PreOrder",
+                priceCurrency: "VND",
+                seller: {
+                    "@type": "Organization",
+                    name: "Vina Edu FC",
+                },
+            },
+            keywords:
+                "drone flight controller, ESP32 flight controller, open source drone controller, Vietnam drone technology, educational drone platform, mạch điều khiển drone",
+        },
+    ],
+};
+
+export default function Home() {
     return (
-        <div className="flex min-h-screen flex-col bg-background text-foreground">
-            <Navbar />
-            <main className="flex-1">
-                <Hero />
-                <About />
-                <LoadoutBuilder />
-                <DownloadCTA />
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <main className="min-h-screen relative bg-slate-950 text-slate-50 selection:bg-cyan-500/30 overflow-hidden">
+                <Navbar />
+                <HeroSection />
+                <AboutSection />
+                <FeaturesSection />
+                <EducationSection />
+                <PartnershipSection />
+                <ContactSection />
+                <Footer />
             </main>
-            <Footer />
-        </div>
-    )
+        </>
+    );
 }
