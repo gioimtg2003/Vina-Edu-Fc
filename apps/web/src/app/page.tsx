@@ -12,17 +12,17 @@ const jsonLd = {
     "@graph": [
         {
             "@type": "WebSite",
-            "@id": "https://vinafc.vn/#website",
-            url: "https://vinafc.vn",
-            name: "VINA EDU FC",
+            "@id": "https://vinauav.com/#website",
+            url: "https://vinauav.com",
+            name: "VINA UAV",
             description: "Vietnam's open-source ESP32 drone flight controller for education and research.",
             inLanguage: ["vi", "en"],
         },
         {
             "@type": "Organization",
-            "@id": "https://vinafc.vn/#organization",
-            name: "Vina Edu FC",
-            url: "https://vinafc.vn",
+            "@id": "https://vinauav.com/#organization",
+            name: "Vina UAV",
+            url: "https://vinauav.com",
             description: "Vietnamese drone technology company creating open-source flight controllers for education.",
             foundingLocation: {
                 "@type": "Country",
@@ -45,18 +45,18 @@ const jsonLd = {
         },
         {
             "@type": "Product",
-            "@id": "https://vinafc.vn/#product",
-            name: "VINA EDU FC",
-            alternateName: ["Vina Edu Flight Controller", "ESP32 Drone Controller Vietnam"],
+            "@id": "https://vinauav.com/#product",
+            name: "VINA UAV",
+            alternateName: ["Vina UAV Flight Controller", "ESP32 Drone Controller Vietnam"],
             description:
                 "An open-source ESP32-based drone flight controller designed and built in Vietnam. Perfect for drone research, education, university labs, maker communities, and robotics engineers. Mạch điều khiển drone mã nguồn mở cho sinh viên và kỹ sư.",
             brand: {
                 "@type": "Brand",
-                name: "VINA EDU FC",
+                name: "VINA UAV",
             },
             manufacturer: {
                 "@type": "Organization",
-                name: "Vina Edu FC",
+                name: "Vina UAV",
                 address: {
                     "@type": "PostalAddress",
                     addressCountry: "VN",
@@ -73,7 +73,7 @@ const jsonLd = {
                 priceCurrency: "VND",
                 seller: {
                     "@type": "Organization",
-                    name: "Vina Edu FC",
+                    name: "Vina UAV",
                 },
             },
             keywords:
