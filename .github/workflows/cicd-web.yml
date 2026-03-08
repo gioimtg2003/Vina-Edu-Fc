@@ -31,13 +31,6 @@ jobs:
       - name: 🧹 Lint Web App
         run: bun run --filter apps/web lint
 
-      - name: 🚀 Deploy to Cloudflare Pages
-        id: deploy
-        env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: bun run --filter apps/web deploy:cf
-
       - name: 📢 Notify Telegram (via Custom Action)
         if: always()
         uses: ./.github/actions/cloudflare-page-telegram-notification
