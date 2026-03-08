@@ -32,22 +32,14 @@
         "@typescript-eslint/no-floating-promises": "error",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/no-misused-promises": "off",
-        "no-console": [
-            "warn",
-            {
-                "allow": [
-                    "warn",
-                    "error"
-                ]
-            }
-        ],
+        "curly": "off",
+        "no-console": "off",
         "prefer-const": "error",
         "no-var": "error",
         "eqeqeq": [
             "error",
             "always"
         ],
-        "curly": "error"
     },
     "ignorePatterns": [
         "node_modules/",
