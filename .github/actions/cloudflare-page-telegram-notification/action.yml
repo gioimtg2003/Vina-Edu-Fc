@@ -1,0 +1,133 @@
+name: 'Cloudflare Pages & Telegram Notification'
+description: 'Theo dõi trạng thái build của Cloudflare Pages và gửi thông báo qua Telegram'
+
+inputs:
+  account_id:
+    description: 'Cloudflare Account ID'
+    required: true
+  api_token:
+    description: 'Cloudflare API Token'
+    required: true
+  project_name:
+    description: 'Cloudflare Pages Project Name'
+    required: true
+  bot_token:
+    description: 'Telegram Bot Token'
+    required: true
+  chat_id:
+    description: 'Telegram Chat ID'
+    required: true
+  commit_hash:
+    description: 'Git commit hash trigger build'
+    required: false
+    default: ${{ github.sha }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Track Deployment & Send Telegram Notification
+      shell: bash
+      env:
+        CF_ACCOUNT_ID: ${{ inputs.account_id }}
+        CF_API_TOKEN: ${{ inputs.api_token }}
+        PROJECT_NAME: ${{ inputs.project_name }}
+        COMMIT_HASH: ${{ inputs.commit_hash }}
+        TELEGRAM_BOT_TOKEN: ${{ inputs.bot_token }}
+        TELEGRAM_CHAT_ID: ${{ inputs.chat_id }}
+      run: |
+        SHORT_HASH="${COMMIT_HASH:0:7}"
+        MAX_RETRIES=40
+        RETRY_COUNT=0
+        DEPLOY_STATUS="unknown"
+        DEPLOY_URL="N/A"
+
+        echo "🚀 Bắt đầu theo dõi Cloudflare Pages deployment (project: $PROJECT_NAME, commit: $SHORT_HASH)..."
+
+        while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+          HTTP_STATUS=$(curl -s -o /tmp/cf_response.json -w "%{http_code}" \
+            "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$PROJECT_NAME/deployments" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json")
+
+          if [ "$HTTP_STATUS" -ne 200 ]; then
+            echo "Lỗi khi gọi API Cloudflare. HTTP Status: $HTTP_STATUS. Thử lại sau 15s..."
+            sleep 15
+            RETRY_COUNT=$((RETRY_COUNT+1))
+            continue
+          fi
+
+          # Dùng jq lọc deployment dựa trên commit_hash
+          MATCH=$(jq -r --arg hash "$COMMIT_HASH" '.result[]? | select((.deployment_trigger.metadata.commit_hash // "") | startswith($hash)) | {status: (.latest_stage.status // .status // "unknown"), url: (.url // "N/A")} | @base64' /tmp/cf_response.json | head -n 1)
+
+          if [ -z "$MATCH" ]; then
+            echo "Chưa tìm thấy deployment khớp với commit $SHORT_HASH. Đang thử lại..."
+          else
+            # Decode kết quả từ base64 chuỗi JSON
+            _PAYLOAD=$(echo "$MATCH" | base64 --decode)
+            DEPLOY_STATUS=$(echo "$_PAYLOAD" | jq -r '.status')
+            DEPLOY_URL=$(echo "$_PAYLOAD" | jq -r '.url')
+
+            echo "Trạng thái hiện tại: $DEPLOY_STATUS"
+
+            if [[ "$DEPLOY_STATUS" == "success" || "$DEPLOY_STATUS" == "failure" || "$DEPLOY_STATUS" == "canceled" ]]; then
+              echo "✅ Đã có kết quả cuối cùng: $DEPLOY_STATUS"
+              break
+            fi
+          fi
+
+          sleep 15
+          RETRY_COUNT=$((RETRY_COUNT+1))
+        done
+
+        if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+          echo "⏱️ Quá thời gian chờ (Timeout) cho deployment."
+          DEPLOY_STATUS="timeout"
+        fi
+
+        # Cấu hình chuỗi trạng thái và icon
+        ICON="ℹ️"
+        STATUS_VI="Không rõ"
+        if [ "$DEPLOY_STATUS" == "success" ]; then
+          ICON="✅"
+          STATUS_VI="Thành công"
+        elif [ "$DEPLOY_STATUS" == "failure" ]; then
+          ICON="❌"
+          STATUS_VI="Thất bại"
+        elif [ "$DEPLOY_STATUS" == "canceled" ]; then
+          ICON="⚠️"
+          STATUS_VI="Đã huỷ"
+        elif [ "$DEPLOY_STATUS" == "timeout" ]; then
+          ICON="⏱️"
+          STATUS_VI="Hết thời gian chờ"
+        fi
+
+        # Soạn tin nhắn Telegram
+        MESSAGE_TEXT="*Cloudflare Pages Deployment*
+        $ICON *Trạng thái:* $STATUS_VI
+        🚀 *Project:* $PROJECT_NAME
+        🔧 *Commit:* \`$SHORT_HASH\`"
+
+        if [[ "$DEPLOY_STATUS" == "success" && "$DEPLOY_URL" != "N/A" ]]; then
+          MESSAGE_TEXT="$MESSAGE_TEXT
+        🌐 *Preview URL:* [Bấm vào đây]($DEPLOY_URL)"
+        fi
+
+        # Encode JSON an toàn bằng jq để chống lỗi syntax với nháy kép, xuống dòng...
+        PAYLOAD=$(jq -n \
+          --arg chat_id "$TELEGRAM_CHAT_ID" \
+          --arg text "$MESSAGE_TEXT" \
+          --arg parse_mode "Markdown" \
+          '{chat_id: $chat_id, text: $text, parse_mode: $parse_mode, disable_web_page_preview: true}')
+
+        echo "Đang gửi thông báo Telegram..."
+        curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+          -H "Content-Type: application/json" \
+          -d "$PAYLOAD" > /dev/null
+
+        echo "Đã gửi thông báo Telegram!"
+
+        # Dừng luồng nếu deploy thất bại
+        if [ "$DEPLOY_STATUS" == "failure" ]; then
+          echo "Workflow sẽ fail do deployment thất bại."
+          exit 1
+        fi
