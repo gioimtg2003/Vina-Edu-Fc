@@ -4,6 +4,7 @@ import FeaturesSection from "@/components/FeaturesSection";
 import EducationSection from "@/components/EducationSection";
 import PartnershipSection from "@/components/PartnershipSection";
 import ContactSection from "@/components/ContactSection";
+import Navbar from "@/components/Navbar";
 
 
 const jsonLd = {
@@ -89,7 +90,7 @@ export default function Home() {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
             <main className="min-h-screen relative bg-slate-950 text-slate-50 selection:bg-cyan-500/30 overflow-hidden">
-                {/* <Navbar /> */}
+                <Navbar /> 
                 <HeroSection />
                 <AboutSection />
                 <FeaturesSection />
