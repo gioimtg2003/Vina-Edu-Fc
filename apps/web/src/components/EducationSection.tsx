@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { BookOpen, Code2, GraduationCap, PlayCircle, QrCode } from "lucide-react";
+import { BookOpen, Code2, GraduationCap } from "lucide-react";
 import { HeroVideoDialog } from "./video-dialog";
 
 export default function EducationSection() {

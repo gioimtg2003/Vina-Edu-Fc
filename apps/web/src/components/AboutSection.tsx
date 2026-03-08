@@ -6,7 +6,6 @@ import { Cpu, FileCode2, Zap } from "lucide-react";
 export default function AboutSection() {
     return (
         <section id="about" aria-label="Giới thiệu sản phẩm Vina Edu FC - Drone flight controller ESP32" className="py-24 relative overflow-hidden bg-slate-900">
-            {/* Background flare */}
             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-600/10 rounded-full blur-[100px]" aria-hidden="true"></div>
 
 
