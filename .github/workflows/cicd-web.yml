@@ -3,10 +3,10 @@ name: CI/CD Web Pipeline
 on:
   push:
     branches:
-      - web
+      - main
   pull_request:
     branches:
-      - web
+      - main
 
 env:
   PROJECT_NAME: 'vinafc-web'
@@ -37,7 +37,7 @@ jobs:
         with:
           account_id: ${{ secrets.CF_ACCOUNT_ID }}
           api_token: ${{ secrets.CF_API_TOKEN }}
-          project_name: ${{ env.PROJECT_NAME }}
+          project_name: "vina-web"
           bot_token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
           commit_hash: ${{ github.sha }}

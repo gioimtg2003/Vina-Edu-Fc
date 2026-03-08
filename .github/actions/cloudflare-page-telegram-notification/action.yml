@@ -41,7 +41,7 @@ runs:
         DEPLOY_STATUS="unknown"
         DEPLOY_URL="N/A"
 
-        echo "🚀 Bắt đầu theo dõi Cloudflare Pages deployment (project: $PROJECT_NAME, commit: $SHORT_HASH)..."
+        echo "🚀 Starting tracking Cloudflare Pages deployment (project: $PROJECT_NAME, commit: $SHORT_HASH)..."
 
         while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
           HTTP_STATUS=$(curl -s -o /tmp/cf_response.json -w "%{http_code}" \
@@ -50,27 +50,25 @@ runs:
             -H "Content-Type: application/json")
 
           if [ "$HTTP_STATUS" -ne 200 ]; then
-            echo "Lỗi khi gọi API Cloudflare. HTTP Status: $HTTP_STATUS. Thử lại sau 15s..."
+            echo "Error when calling API Cloudflare. HTTP Status: $HTTP_STATUS. Retrying after 15s..."
             sleep 15
             RETRY_COUNT=$((RETRY_COUNT+1))
             continue
           fi
 
-          # Dùng jq lọc deployment dựa trên commit_hash
           MATCH=$(jq -r --arg hash "$COMMIT_HASH" '.result[]? | select((.deployment_trigger.metadata.commit_hash // "") | startswith($hash)) | {status: (.latest_stage.status // .status // "unknown"), url: (.url // "N/A")} | @base64' /tmp/cf_response.json | head -n 1)
 
           if [ -z "$MATCH" ]; then
-            echo "Chưa tìm thấy deployment khớp với commit $SHORT_HASH. Đang thử lại..."
+            echo "No deployment matching commit $SHORT_HASH. Retrying..."
           else
-            # Decode kết quả từ base64 chuỗi JSON
             _PAYLOAD=$(echo "$MATCH" | base64 --decode)
             DEPLOY_STATUS=$(echo "$_PAYLOAD" | jq -r '.status')
             DEPLOY_URL=$(echo "$_PAYLOAD" | jq -r '.url')
 
-            echo "Trạng thái hiện tại: $DEPLOY_STATUS"
+            echo "Current status: $DEPLOY_STATUS"
 
             if [[ "$DEPLOY_STATUS" == "success" || "$DEPLOY_STATUS" == "failure" || "$DEPLOY_STATUS" == "canceled" ]]; then
-              echo "✅ Đã có kết quả cuối cùng: $DEPLOY_STATUS"
+              echo "✅ Final result: $DEPLOY_STATUS"
               break
             fi
           fi
@@ -80,54 +78,50 @@ runs:
         done
 
         if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-          echo "⏱️ Quá thời gian chờ (Timeout) cho deployment."
+          echo "⏱️ Timeout for deployment."
           DEPLOY_STATUS="timeout"
         fi
 
-        # Cấu hình chuỗi trạng thái và icon
         ICON="ℹ️"
-        STATUS_VI="Không rõ"
+        STATUS_VI="Unknown"
         if [ "$DEPLOY_STATUS" == "success" ]; then
           ICON="✅"
-          STATUS_VI="Thành công"
+          STATUS_VI="Success"
         elif [ "$DEPLOY_STATUS" == "failure" ]; then
           ICON="❌"
-          STATUS_VI="Thất bại"
+          STATUS_VI="Failure"
         elif [ "$DEPLOY_STATUS" == "canceled" ]; then
           ICON="⚠️"
-          STATUS_VI="Đã huỷ"
+          STATUS_VI="Canceled"
         elif [ "$DEPLOY_STATUS" == "timeout" ]; then
           ICON="⏱️"
-          STATUS_VI="Hết thời gian chờ"
+          STATUS_VI="Timeout"
         fi
 
-        # Soạn tin nhắn Telegram
         MESSAGE_TEXT="*Cloudflare Pages Deployment*
-        $ICON *Trạng thái:* $STATUS_VI
+        $ICON *Status:* $STATUS_VI
         🚀 *Project:* $PROJECT_NAME
         🔧 *Commit:* \`$SHORT_HASH\`"
 
         if [[ "$DEPLOY_STATUS" == "success" && "$DEPLOY_URL" != "N/A" ]]; then
           MESSAGE_TEXT="$MESSAGE_TEXT
-        🌐 *Preview URL:* [Bấm vào đây]($DEPLOY_URL)"
+        🌐 *Preview URL:* [Click here]($DEPLOY_URL)"
         fi
 
-        # Encode JSON an toàn bằng jq để chống lỗi syntax với nháy kép, xuống dòng...
         PAYLOAD=$(jq -n \
           --arg chat_id "$TELEGRAM_CHAT_ID" \
           --arg text "$MESSAGE_TEXT" \
           --arg parse_mode "Markdown" \
           '{chat_id: $chat_id, text: $text, parse_mode: $parse_mode, disable_web_page_preview: true}')
 
-        echo "Đang gửi thông báo Telegram..."
+        echo "Sending Telegram notification..."
         curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
           -H "Content-Type: application/json" \
           -d "$PAYLOAD" > /dev/null
 
-        echo "Đã gửi thông báo Telegram!"
+        echo "Telegram notification sent!"
 
-        # Dừng luồng nếu deploy thất bại
         if [ "$DEPLOY_STATUS" == "failure" ]; then
-          echo "Workflow sẽ fail do deployment thất bại."
+          echo "Workflow will fail due to deployment failure."
           exit 1
         fi
