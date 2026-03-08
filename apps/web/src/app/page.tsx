@@ -4,8 +4,8 @@ import FeaturesSection from "@/components/FeaturesSection";
 import EducationSection from "@/components/EducationSection";
 import PartnershipSection from "@/components/PartnershipSection";
 import ContactSection from "@/components/ContactSection";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const jsonLd = {
     "@context": "https://schema.org",
