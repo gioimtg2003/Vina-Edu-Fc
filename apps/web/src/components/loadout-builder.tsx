@@ -67,16 +67,24 @@ export function LoadoutBuilder() {
     const selectedEdition = selectedProduct?.pricing.find((p) => p.id === selectedEditionId)
 
     const handleNext = () => {
-        if (step === 1 && selectedFcId) setStep(2)
-        else if (step === 2 && selectedEditionId) setStep(3)
+        if (step === 1 && selectedFcId) {
+            setStep(2)
+        }
+        else if (step === 2 && selectedEditionId) {
+            setStep(3)
+        }
         // Step 3 triggers the actual "buy" flow
     }
 
     const handleBack = () => {
         if (step > 1) {
             setStep(step - 1)
-            if (step === 2) setSelectedEditionId(null)
-            if (step === 3) setWantsSetup(false)
+            if (step === 2) {
+                setSelectedEditionId(null)
+            }
+            if (step === 3) {
+                setWantsSetup(false)
+            }
         }
     }
 

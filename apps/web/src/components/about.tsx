@@ -55,7 +55,7 @@ export function About() {
                         transition={{ delay: 0.1 }}
                         className="font-display text-4xl font-bold tracking-tight text-white sm:text-5xl"
                     >
-                        We didn't just build a board. <br />
+                        We didn&apos;t just build a board. <br />
                         <span className="text-muted-foreground">We built a central nervous system.</span>
                     </motion.h2>
                 </div>

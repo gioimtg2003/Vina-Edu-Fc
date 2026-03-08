@@ -1,35 +1,41 @@
 {
-    "name": "@vinafc/web",
-    "version": "0.1.0",
-    "private": true,
-    "description": "Next.js web application for VinaFlightControl",
-    "scripts": {
-        "dev": "next dev --turbopack",
-        "build": "next build",
-        "start": "next start",
-        "lint": "next lint",
-        "typecheck": "tsc --noEmit",
-        "build:cf": "opennextjs-cloudflare build",
-        "deploy:cf": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
-    },
-    "dependencies": {
-        "@vinauav/ui": "workspace:*",
-        "framer-motion": "^12.35.1",
-        "lucide-react": "^0.577.0",
-        "next": "^15.2.1",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0"
-    },
-    "devDependencies": {
-        "@opennextjs/cloudflare": "^1.17.1",
-        "@types/node": "^22.13.9",
-        "@types/react": "^19.0.10",
-        "@types/react-dom": "^19.0.4",
-        "@vinauav/config": "workspace:*",
-        "autoprefixer": "^10.4.21",
-        "postcss": "^8.5.3",
-        "tailwindcss": "^3.4.17",
-        "typescript": "^5.7.3",
-        "wrangler": "^4.71.0"
-    }
+  "name": "@vinafc/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Next.js web application for VinaFlightControl",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "build:cf": "opennextjs-cloudflare build",
+    "deploy:cf": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+  },
+  "dependencies": {
+    "@vinauav/ui": "workspace:*",
+    "framer-motion": "^12.35.1",
+    "lucide-react": "^0.577.0",
+    "next": "^15.2.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@next/eslint-plugin-next": "^16.1.6",
+    "@opennextjs/cloudflare": "^1.17.1",
+    "@types/node": "^22.13.9",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vinauav/config": "workspace:*",
+    "autoprefixer": "^10.4.21",
+    "eslint": "9",
+    "eslint-config-next": "15.2.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3",
+    "wrangler": "^4.71.0"
+  }
 }
