@@ -43,12 +43,12 @@ export default function NavigationBar() {
                         </motion.a>
                     ))}
                     <motion.a
-                        href="#contact"
+                        href="#dat-hang"
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.4 }}
                         className="px-5 py-2 cursor-pointer rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/50 hover:bg-cyan-500/20 hover:shadow-[0_0_15px_-3px_rgba(6,182,212,0.4)] transition-all font-medium text-sm"
-                        aria-label="Đăng ký nhận hàng trước"
+                        aria-label="Đặt hàng và đặt lịch tư vấn VinaFC"
                     >
                         Đặt hàng trước
                     </motion.a>
@@ -86,6 +86,15 @@ export default function NavigationBar() {
                             {link.name}
                         </a>
                     ))}
+                    <a
+                        href="#dat-hang"
+                        onClick={() => setIsOpen(false)}
+                        className="mx-4 mt-2 block text-center px-5 py-2.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/50 hover:bg-cyan-500/20 transition-all font-medium text-sm"
+                        role="menuitem"
+                        aria-label="Đặt hàng và đặt lịch tư vấn VinaFC"
+                    >
+                        Đặt hàng trước
+                    </a>
                 </motion.div>
             )}
         </nav>

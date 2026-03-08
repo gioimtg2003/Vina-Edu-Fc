@@ -2,6 +2,8 @@ import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import EducationSection from "@/components/EducationSection";
+import LoadoutBuilder from "@/components/LoadoutBuilder";
+import BookingSection from "@/components/BookingSection";
 import PartnershipSection from "@/components/PartnershipSection";
 import ContactSection from "@/components/ContactSection";
 import NavigationBar from "@/components/NavigationBar";
@@ -96,6 +98,8 @@ export default function Home() {
                 <AboutSection />
                 <FeaturesSection />
                 <EducationSection />
+                <LoadoutBuilder />
+                <BookingSection />
                 <PartnershipSection />
                 <ContactSection />
                 <PageFooter />
