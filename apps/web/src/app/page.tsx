@@ -4,7 +4,6 @@ import FeaturesSection from "@/components/FeaturesSection";
 import EducationSection from "@/components/EducationSection";
 import PartnershipSection from "@/components/PartnershipSection";
 import ContactSection from "@/components/ContactSection";
-import Navbar from "@/components/Navbar";
 import NavigationBar from "@/components/NavigationBar";
 import PageFooter from "@/components/PageFooter";
 
