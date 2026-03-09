@@ -3,4 +3,7 @@
 interface Env {
 	CHAT_CONTEXT: KVNamespace;
 	AI: Ai;
+
+	ZALO_BOT_TOKEN: string,
+
 }
