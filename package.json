@@ -5,7 +5,8 @@
     "description": "Bun monorepo for the VinaFlightControl drone flight controller ecosystem",
     "workspaces": [
         "apps/*",
-        "packages/*"
+        "packages/*",
+        "workers/*"
     ],
     "scripts": {
         "dev": "bun run --filter '*' dev",
