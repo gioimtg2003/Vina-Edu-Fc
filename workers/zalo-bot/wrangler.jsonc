@@ -2,8 +2,17 @@
     "$schema": "node_modules/wrangler/config-schema.json",
     "name": "zalo-bot",
     "main": "src/index.ts",
-    "compatibility_date": "2025-02-14",
+    "compatibility_date": "2026-03-09",
     "observability": {
         "enabled": true
-    }
+    },
+    "ai": {
+        "binding": "AI"
+    },
+    "kv_namespaces": [
+        {
+            "binding": "CHAT_CONTEXT",
+            "id": "0a0caad5d2c247ba91ea09bc00347a23",
+        }
+    ]
 }
