@@ -172,59 +172,58 @@ function StepSelectProduct({
             <p className="text-slate-400 text-sm leading-relaxed border-l-2 border-cyan-500/50 pl-3 mb-6">
                 {ECOSYSTEM_INFO}
             </p>
-            <div className="flex justify-center px-4">
-                <div className="grid md:grid-cols-3 gap-6">
-                    {PRODUCTS.map((product) => {
-                        const isSelected = selected === product.id;
-                        const cls = accentClasses(product.accentColor, isSelected);
-                        return (
-                            <motion.button
-                                key={product.id}
-                                onClick={() => onSelect(product.id)}
-                                whileHover={{ scale: 1.02, y: -2 }}
-                                whileTap={{ scale: 0.98 }}
-                                className={`relative max-w-[364px] text-left rounded-2xl border p-5 cursor-pointer transition-all duration-300 ${cls.border} ${cls.bg} ${isSelected ? `ring-1 ${cls.ring} shadow-lg` : ""}`}
-                                style={{ boxShadow: isSelected ? `0 0 24px -6px ${product.glowColor}` : undefined }}
-                                aria-pressed={isSelected}
-                            >
-                                {isSelected && (
-                                    <motion.div
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1 }}
-                                        className="absolute top-3 right-3"
-                                    >
-                                        <CheckCircle2 className={`w-5 h-5 ${cls.text}`} />
-                                    </motion.div>
-                                )}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {PRODUCTS.map((product) => {
+                    const isSelected = selected === product.id;
+                    const cls = accentClasses(product.accentColor, isSelected);
+                    return (
+                        <motion.button
+                            key={product.id}
+                            onClick={() => onSelect(product.id)}
+                            whileHover={{ scale: 1.02, y: -2 }}
+                            whileTap={{ scale: 0.98 }}
+                            className={`relative w-full text-left rounded-2xl border p-4 sm:p-5 cursor-pointer transition-all duration-300 ${cls.border} ${cls.bg} ${isSelected ? `ring-1 ${cls.ring} shadow-lg` : ""}`}
+                            style={{ boxShadow: isSelected ? `0 0 24px -6px ${product.glowColor}` : undefined }}
+                            aria-pressed={isSelected}
+                        >
+                            {isSelected && (
+                                <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="absolute top-3 right-3"
+                                >
+                                    <CheckCircle2 className={`w-5 h-5 ${cls.text}`} />
+                                </motion.div>
+                            )}
 
-                                <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-mono font-semibold mb-3 bg-current/10 ${cls.text} border border-current/20`}>
-                                    <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                                    {product.badge}
-                                </div>
+                            <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-mono font-semibold mb-3 bg-current/10 ${cls.text} border border-current/20`}>
+                                <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                                {product.badge}
+                            </div>
 
-                                <h3 className="text-white font-bold text-sm leading-snug mb-2">
-                                    {product.name}
-                                </h3>
-                                <p className="text-slate-400 text-xs leading-relaxed mb-4">
-                                    {product.description}
-                                </p>
+                            <h3 className="text-white font-bold text-sm leading-snug mb-2">
+                                {product.name}
+                            </h3>
+                            <p className="text-slate-400 text-xs leading-relaxed mb-4">
+                                {product.description}
+                            </p>
 
-                                <ul className="space-y-1.5">
-                                    {product.specs.map((spec) => (
-                                        <li key={spec.label} className="flex gap-2 text-xs">
-                                            <span className="text-slate-500 shrink-0">{spec.label}:</span>
-                                            <span className="text-slate-300">{spec.value}</span>
-                                        </li>
-                                    ))}
-                                </ul>
+                            <ul className="space-y-1.5">
+                                {product.specs.map((spec) => (
+                                    <li key={spec.label} className="flex gap-2 text-xs">
+                                        <span className="text-slate-500 shrink-0">{spec.label}:</span>
+                                        <span className="text-slate-300">{spec.value}</span>
+                                    </li>
+                                ))}
+                            </ul>
 
-                                <div className={`mt-4 pt-3 border-t border-slate-700/60 text-xs ${cls.text} font-medium`}>
-                                    Từ {product.pricing[0]?.price}
-                                </div>
-                            </motion.button>
-                        );
-                    })}
-                </div></div>
+                            <div className={`mt-4 pt-3 border-t border-slate-700/60 text-xs ${cls.text} font-medium`}>
+                                Từ {product.pricing[0]?.price}
+                            </div>
+                        </motion.button>
+                    );
+                })}
+            </div>
         </div>
     );
 }
@@ -253,57 +252,55 @@ function StepSelectVariant({
 
             <p className="text-slate-400 text-sm">{product.description}</p>
 
-            <div className="flex justify-center w-full">
-                <div className="grid sm:grid-cols-2 gap-10 w-full">
-                    {product.pricing.map((option, idx) => {
-                        const isSelected = selected === idx;
-                        const varCls = accentClasses(product.accentColor, isSelected);
-                        return (
-                            <motion.button
-                                key={idx}
-                                onClick={() => onSelect(idx)}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className={`relative text-left rounded-2xl border p-6 cursor-pointer transition-all duration-300 ${varCls.border} ${varCls.bg} ${isSelected ? `ring-1 ${varCls.ring}` : ""}`}
-                                style={{ boxShadow: isSelected ? `0 0 20px -6px ${product.glowColor}` : undefined }}
-                                aria-pressed={isSelected}
-                            >
-                                {isSelected && (
-                                    <motion.div
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1 }}
-                                        className="absolute top-4 right-4"
-                                    >
-                                        <CheckCircle2 className={`w-5 h-5 ${varCls.text}`} />
-                                    </motion.div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {product.pricing.map((option, idx) => {
+                    const isSelected = selected === idx;
+                    const varCls = accentClasses(product.accentColor, isSelected);
+                    return (
+                        <motion.button
+                            key={idx}
+                            onClick={() => onSelect(idx)}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className={`relative text-left rounded-2xl border p-6 cursor-pointer transition-all duration-300 ${varCls.border} ${varCls.bg} ${isSelected ? `ring-1 ${varCls.ring}` : ""}`}
+                            style={{ boxShadow: isSelected ? `0 0 20px -6px ${product.glowColor}` : undefined }}
+                            aria-pressed={isSelected}
+                        >
+                            {isSelected && (
+                                <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="absolute top-4 right-4"
+                                >
+                                    <CheckCircle2 className={`w-5 h-5 ${varCls.text}`} />
+                                </motion.div>
+                            )}
+                            <div className="flex items-center gap-2 mb-3">
+                                {idx === 0 ? (
+                                    <Package className="w-4 h-4 text-slate-400" />
+                                ) : (
+                                    <Zap className={`w-4 h-4 ${varCls.text}`} />
                                 )}
-                                <div className="flex items-center gap-2 mb-3">
-                                    {idx === 0 ? (
-                                        <Package className="w-4 h-4 text-slate-400" />
-                                    ) : (
-                                        <Zap className={`w-4 h-4 ${varCls.text}`} />
-                                    )}
-                                    <span className="text-white font-semibold text-sm">
-                                        {option.label}
-                                    </span>
-                                </div>
-                                {idx === 0 && (
-                                    <p className="text-xs text-slate-500 mb-3">
-                                        Dành cho người tự hàn linh kiện (Chưa kèm MCU và cảm biến)
-                                    </p>
-                                )}
-                                {idx === 1 && (
-                                    <p className="text-xs text-slate-500 mb-3">
-                                        Cắm là chạy — đã kiểm thử và hiệu chỉnh sẵn
-                                    </p>
-                                )}
-                                <div className={`text-2xl font-black tracking-tight ${varCls.text}`}>
-                                    {option.price}
-                                </div>
-                            </motion.button>
-                        );
-                    })}
-                </div>
+                                <span className="text-white font-semibold text-sm">
+                                    {option.label}
+                                </span>
+                            </div>
+                            {idx === 0 && (
+                                <p className="text-xs text-slate-500 mb-3">
+                                    Dành cho người tự hàn linh kiện (Chưa kèm MCU và cảm biến)
+                                </p>
+                            )}
+                            {idx === 1 && (
+                                <p className="text-xs text-slate-500 mb-3">
+                                    Cắm là chạy — đã kiểm thử và hiệu chỉnh sẵn
+                                </p>
+                            )}
+                            <div className={`text-2xl font-black tracking-tight ${varCls.text}`}>
+                                {option.price}
+                            </div>
+                        </motion.button>
+                    );
+                })}
             </div>
         </div>
     );
@@ -399,16 +396,16 @@ const STEPS = ["Chọn sản phẩm", "Chọn phiên bản", "Xác nhận"];
 
 function StepIndicator({ current }: { current: number }) {
     return (
-        <div className="flex items-center gap-0 mb-8">
+        <div className="flex items-center mb-8">
             {STEPS.map((label, i) => {
                 const done = i < current;
                 const active = i === current;
                 return (
-                    <div key={i} className="flex items-center flex-1 last:flex-none">
-                        <div className="flex flex-col items-center gap-1.5">
+                    <div key={i} className="flex items-center flex-1 last:flex-none min-w-0">
+                        <div className="flex flex-col items-center gap-1">
                             <motion.div
                                 animate={{
-                                    scale: active ? 1.15 : 1,
+                                    scale: active ? 1.1 : 1,
                                     backgroundColor: done
                                         ? "#22d3ee"
                                         : active
@@ -416,19 +413,21 @@ function StepIndicator({ current }: { current: number }) {
                                             : "#1e293b",
                                     borderColor: done || active ? "#06b6d4" : "#334155",
                                 }}
-                                className="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-colors"
+                                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold shrink-0"
                                 style={{ color: done || active ? "#fff" : "#64748b" }}
                             >
-                                {done ? <CheckCircle2 className="w-4 h-4" /> : i + 1}
+                                {done ? <CheckCircle2 className="w-3.5 h-3.5" /> : i + 1}
                             </motion.div>
+                            {/* Step label — always visible, tiny on mobile */}
                             <span
-                                className={`text-[10px] font-mono whitespace-nowrap ${active ? "text-cyan-400" : done ? "text-cyan-500/70" : "text-slate-600"}`}
+                                className={`text-[8px] sm:text-[10px] font-mono whitespace-nowrap mt-0.5 ${active ? "text-cyan-400" : done ? "text-cyan-500/70" : "text-slate-600"
+                                    }`}
                             >
                                 {label}
                             </span>
                         </div>
                         {i < STEPS.length - 1 && (
-                            <div className="flex-1 h-px mx-3 mb-5 relative">
+                            <div className="flex-1 h-px mx-2 sm:mx-3 mb-4 relative shrink">
                                 <div className="absolute inset-0 bg-slate-700" />
                                 <motion.div
                                     className="absolute inset-0 bg-cyan-500"
@@ -472,7 +471,7 @@ export default function LoadoutBuilder() {
         <section
             id="shop"
             aria-label="VinaFC Loadout Builder - Cấu hình và đặt mua bộ điều khiển bay"
-            className="py-24 relative overflow-hidden bg-slate-950"
+            className="py-16 md:py-24 relative overflow-hidden bg-slate-950"
         >
             {/* Background glows */}
             <div
@@ -484,7 +483,7 @@ export default function LoadoutBuilder() {
                 aria-hidden="true"
             />
 
-            <div className="max-w-[1232px] mx-auto relative z-10">
+            <div className="max-w-[1232px] mx-auto px-4 sm:px-6 relative z-10">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -497,7 +496,7 @@ export default function LoadoutBuilder() {
                         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                         Loadout Builder
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-3">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-3">
                         Cấu Hình{" "}
                         <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                             Bo Mạch
@@ -516,15 +515,15 @@ export default function LoadoutBuilder() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="relative rounded-3xl border border-slate-700/60 bg-slate-900/70 backdrop-blur-xl p-6 md:p-10 shadow-[0_0_60px_-20px_rgba(6,182,212,0.15)] overflow-hidden"
+                    className="relative rounded-2xl sm:rounded-3xl border border-slate-700/60 bg-slate-900/70 backdrop-blur-xl p-4 sm:p-6 md:p-10 shadow-[0_0_60px_-20px_rgba(6,182,212,0.15)] overflow-hidden"
                 >
                     {/* Decorative corner */}
                     <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
 
                     <StepIndicator current={step} />
 
-                    {/* Step content with AnimatePresence */}
-                    <div className="relative  min-h-[420px]">
+                    {/* Step content with AnimatePresence — uses relative layout so height grows with content */}
+                    <div className="relative overflow-hidden">
                         <AnimatePresence mode="wait" custom={direction}>
                             <motion.div
                                 key={step}
@@ -534,7 +533,7 @@ export default function LoadoutBuilder() {
                                 animate="center"
                                 exit="exit"
                                 transition={transition}
-                                className="absolute inset-0"
+                                className="w-full"
                             >
                                 {step === 0 && (
                                     <StepSelectProduct
@@ -560,7 +559,7 @@ export default function LoadoutBuilder() {
                     </div>
 
                     {/* Navigation buttons */}
-                    <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-800">
+                    <div className="flex items-center justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-800">
                         <Button
                             variant="ghost"
                             onClick={() => goTo(step - 1)}
