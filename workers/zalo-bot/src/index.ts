@@ -1,65 +1,100 @@
-import type { WebhookResult } from "./types";
-import { routeEvent } from "./router";
+import { Hono } from 'hono';
+import { ChatCloudflareWorkersAI } from '@langchain/cloudflare';
+import { createSupervisorAgent } from './agents/supervisor';
+import { HumanMessage, AIMessage } from '@langchain/core/messages';
+import { sendMessage } from './zalo';
 
-export const maxTextLength = 2000;
-function jsonResponse(body: unknown, status: number): Response {
-	return new Response(JSON.stringify(body), {
-		status,
-		headers: { "Content-Type": "application/json" },
+const app = new Hono<{ Bindings: Env & any }>();
+
+app.get('/', (c) => {
+	return c.text('VinaUAV Multi-Agent Bot Architecture is Active!');
+});
+
+app.post('/webhook', async (c) => {
+	const body = await c.req.json();
+	const userId = body.userId || body.message?.chat?.id || "default_user";
+	const userMessage = body.text || body.message?.text || "";
+
+	if (!userMessage) return c.json({ error: "No message found" }, 400);
+
+	// Initialize Workers AI Model
+	const model = new ChatCloudflareWorkersAI({
+		model: "@hf/thebloke/neural-chat-7b-v3-1-awq", // Standard CF Workers AI model, can adjust
+		ai: c.env.AI
+	} as any);
+
+	// Compile our Multi-Agent state graph
+	const graph = createSupervisorAgent(c.env, model);
+
+	// Retrieve thread state from KV
+	const threadKey = `thread:${userId}`;
+	const storedState = await c.env.CHAT_CONTEXT.get(threadKey, "json") as any[] || [];
+
+	// Reconstruct conversation history
+	const messages = storedState.map(msg =>
+		msg.type === 'human' ? new HumanMessage(msg.content) : new AIMessage(msg.content)
+	);
+	messages.push(new HumanMessage(userMessage));
+
+	// Invoke the autonomous LangGraph agentic loop
+	const result = await graph.invoke(
+		{ messages },
+		{ configurable: { thread_id: userId } }
+	);
+
+	const outMessages = result.messages;
+	const finalMsg = outMessages[outMessages.length - 1];
+
+	// Persist thread state back to KV (keep context window small by retaining last 10 messages)
+	const messagesToSave = outMessages.map((m: any) => ({
+		type: m._getType(),
+		content: m.content
+	})).slice(-10);
+
+	await c.env.CHAT_CONTEXT.put(threadKey, JSON.stringify(messagesToSave));
+
+	return c.json({
+		response: finalMsg.content,
+		threadId: userId
 	});
-}
+});
 
-/**
- * Validates the X-Bot-Api-Secret-Token header against the SECRET_TOKEN
- * environment variable using a timing-safe comparison.
- */
-function isAuthorized(request: Request, secretToken: string): boolean {
-	const header = request.headers.get("X-Bot-Api-Secret-Token");
-	if (!header) return false;
+app.post('/payment', async (c) => {
 
-	// Timing-safe comparison to prevent timing attacks.
-	if (header.length !== secretToken.length) return false;
-
-	let result = 0;
-	for (let i = 0; i < header.length; i++) {
-		result |= header.charCodeAt(i) ^ secretToken.charCodeAt(i);
+	const reqApiKey = c.req.header('Authorization') || "";
+	if (reqApiKey !== `Bearer ${c.env.SEPAY_API_KEY}`) {
+		return c.json({ error: "Unauthorized" }, 401);
 	}
-	return result === 0;
-}
 
+	const body = await c.req.json();
+	const content = body.transaction_content || body.content || "";
+	const amount = body.transferAmount || body.amount || 0;
 
+	const match = content.match(/VNAFC_[A-Z0-9]+/);
+	if (!match) {
+		return c.json({ message: "No matching memo found in transaction content", ok: true });
+	}
 
-export default {
-	async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
-		if (request.method !== "POST") {
-			return jsonResponse({ error: "Method Not Allowed" }, 405);
-		}
+	const memo = match[0];
 
-		const contentType = request.headers.get("Content-Type") ?? "";
-		if (!contentType.includes("application/json")) {
-			return jsonResponse({ error: "Unsupported Media Type — use application/json" }, 415);
-		}
-		if (!isAuthorized(request, "VinaUAV123")) {
-			console.warn("[auth] Unauthorized request from", request.headers.get("CF-Connecting-IP"));
-			return jsonResponse({ error: "Unauthorized" }, 401);
-		}
+	const orm = new (await import('./services/db')).D1Orm(c.env.DB);
+	const chatId = await orm.completeOrderStatus(memo, amount);
 
-		let payload: WebhookResult = await request.json();
+	if (chatId) {
 
-		if (!Object.keys(payload ?? {}).includes("event_name")) {
-			console.warn("[router] Received payload with ok=false, skipping.");
-			return jsonResponse({ ok: true, message: "Skipped non-ok payload" }, 200);
-		}
 
 		try {
+			await sendMessage(c.env.ZALO_BOT_TOKEN, {
 
-			await routeEvent(payload, env);
-		} catch (err) {
-			const message = err instanceof Error ? err.message : "Internal error";
-			console.error("[handler]", message, err);
-			return jsonResponse({ ok: false, error: message }, 200);
+			});
+
+			console.log("Sent Zalo payment success notification to", chatId);
+		} catch (e) {
+			console.error("Failed to send Zalo notification:", e);
 		}
+	}
 
-		return jsonResponse({ ok: true }, 200);
-	},
-} satisfies ExportedHandler<Env>;
+	return c.json({ success: true });
+});
+
+export default app;

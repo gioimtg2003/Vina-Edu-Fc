@@ -2,8 +2,6 @@
 
 interface Env {
 	CHAT_CONTEXT: KVNamespace;
+	DB: D1Database;
 	AI: Ai;
-
-	ZALO_BOT_TOKEN: string,
-
 }

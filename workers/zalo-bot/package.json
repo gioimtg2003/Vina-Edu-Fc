@@ -12,5 +12,14 @@
         "@cloudflare/workers-types": "^4.20240925.0",
         "typescript": "^5.7.3",
         "wrangler": "^3.109.2"
+    },
+    "dependencies": {
+        "@langchain/cloudflare": "^1.0.4",
+        "@langchain/community": "^1.1.22",
+        "@langchain/core": "^1.1.31",
+        "@langchain/langgraph": "^1.2.1",
+        "hono": "^4.12.5",
+        "jose": "^6.2.1",
+        "zod": "^4.3.6"
     }
 }

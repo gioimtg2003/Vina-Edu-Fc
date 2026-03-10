@@ -12,7 +12,14 @@
     "kv_namespaces": [
         {
             "binding": "CHAT_CONTEXT",
-            "id": "0a0caad5d2c247ba91ea09bc00347a23",
+            "id": "0a0caad5d2c247ba91ea09bc00347a23"
+        }
+    ],
+    "d1_databases": [
+        {
+            "binding": "DB",
+            "database_name": "vina-uav-db",
+            "database_id": "YOUR_D1_UUID_HERE"
         }
     ]
 }
