@@ -15,10 +15,7 @@ export default function Home() {
             <CoursesSection />
 
             <HardwareProducts />
-            {/* Section 4 */}
             <Documentation />
-
-            {/* Section 5 */}
         </>
     );
 }

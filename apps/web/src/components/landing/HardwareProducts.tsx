@@ -4,7 +4,6 @@ import { motion, Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { PRODUCTS } from "@/lib/products";
-import { Button } from "@vinauav/ui";
 
 const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
