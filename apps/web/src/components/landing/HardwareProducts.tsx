@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, ChevronRight, Cpu } from "lucide-react";
+import { motion, Variants } from "framer-motion";
+import { ChevronRight, Cpu } from "lucide-react";
 import Image from "next/image";
 
 const products = [
@@ -46,7 +46,7 @@ const products = [
     },
 ];
 
-const fadeUp = {
+const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
 };
@@ -85,9 +85,8 @@ export default function HardwareProducts() {
                                 whileInView="visible"
                                 viewport={{ once: true, margin: "-100px" }}
                                 variants={fadeUp}
-                                className={`flex flex-col md:flex-row items-center gap-12 lg:gap-20 ${
-                                    isEven ? "" : "md:flex-row-reverse"
-                                }`}
+                                className={`flex flex-col md:flex-row items-center gap-12 lg:gap-20 ${isEven ? "" : "md:flex-row-reverse"
+                                    }`}
                             >
                                 {/* Image Half */}
                                 <div className="w-full md:w-1/2 group relative">

@@ -1,9 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Wrench, Cpu, MapPin, GraduationCap } from "lucide-react";
 
-const fadeUpVariant = {
+const fadeUpVariant: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: (i: number) => ({
         opacity: 1,

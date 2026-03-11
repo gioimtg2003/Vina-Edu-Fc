@@ -1,102 +1,134 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Search, User, ShoppingCart } from "lucide-react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function NavigationBar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener("scroll", handleScroll);
+        // Initial check
+        handleScroll();
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     const navLinks = [
-        { name: "Công nghệ", href: "#technology" },
-        { name: "Giáo dục", href: "#education" },
-        { name: "Đối tác", href: "#partnerships" },
-        { name: "Liên hệ", href: "#contact" },
+        { name: "Sản phẩm", href: "#products" },
+        { name: "Khóa học", href: "#courses" },
+        { name: "Tài liệu", href: "#docs" },
+        { name: "Hỗ trợ", href: "#support" },
     ];
 
     return (
-        <nav aria-label="Điều hướng chính" className="fixed top-0 left-0 right-0 z-50 glass border-b shadow-lg shadow-cyan-900/10">
-            <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between relative">
+        <nav 
+            aria-label="Điều hướng chính" 
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+                scrolled ? "bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm" : "bg-transparent"
+            }`}
+        >
+            <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between relative">
+                {/* Logo Area */}
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="text-2xl font-bold tracking-tighter"
+                    transition={{ duration: 0.5 }}
+                    className="flex-shrink-0 flex items-center"
                 >
-                    <a href="#hero" aria-label="VINA EDU FC - Trang chủ">
-                        <span className="text-white">VINA EDU</span>
-                        <span className="text-cyan-400 ml-1">FC</span>
-                    </a>
+                    <Link href="/" className="text-2xl font-black tracking-tighter" aria-label="VinaUAV - Trang chủ">
+                        <span className={`transition-colors duration-300 text-gray-900`}>Vina</span>
+                        <span className={`transition-colors duration-300 text-gray-500`}>UAV</span>
+                    </Link>
                 </motion.div>
 
-                {/* Desktop Nav */}
-                <div className="hidden md:flex items-center space-x-8">
+                {/* Desktop Nav Center */}
+                <div className="hidden md:flex items-center justify-center space-x-10 absolute left-1/2 -translate-x-1/2">
                     {navLinks.map((link, i) => (
                         <motion.a
                             key={link.name}
                             href={link.href}
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.1 }}
-                            className="text-sm font-medium text-slate-300 hover:text-cyan-400 transition-colors"
+                            transition={{ delay: i * 0.1, duration: 0.5 }}
+                            className={`text-sm font-medium transition-colors hover:text-black ${
+                                scrolled ? 'text-gray-600' : 'text-gray-800'
+                            }`}
                         >
                             {link.name}
                         </motion.a>
                     ))}
-                    <motion.a
-                        href="#dat-hang"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.4 }}
-                        className="px-5 py-2 cursor-pointer rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/50 hover:bg-cyan-500/20 hover:shadow-[0_0_15px_-3px_rgba(6,182,212,0.4)] transition-all font-medium text-sm"
-                        aria-label="Đặt hàng và đặt lịch tư vấn VinaFC"
-                    >
-                        Đặt hàng trước
-                    </motion.a>
+                </div>
+
+                {/* Desktop Right Utilities */}
+                <div className="hidden md:flex items-center space-x-6 justify-end">
+                    <button aria-label="Tìm kiếm" className={`hover:text-black transition-colors ${scrolled ? 'text-gray-600' : 'text-gray-800'}`}>
+                        <Search className="w-5 h-5" strokeWidth={1.5} />
+                    </button>
+                    <button aria-label="Giỏ hàng" className={`hover:text-black transition-colors ${scrolled ? 'text-gray-600' : 'text-gray-800'}`}>
+                        <ShoppingCart className="w-5 h-5" strokeWidth={1.5} />
+                    </button>
+                    <button aria-label="Tài khoản" className={`hover:text-black transition-colors ${scrolled ? 'text-gray-600' : 'text-gray-800'}`}>
+                        <User className="w-5 h-5" strokeWidth={1.5} />
+                    </button>
                 </div>
 
                 {/* Mobile menu button */}
-                <div className="md:hidden">
+                <div className="md:hidden flex items-center">
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="text-slate-300"
+                        className={`transition-colors ${scrolled ? 'text-gray-900' : 'text-gray-900'}`}
                         aria-label={isOpen ? "Đóng menu" : "Mở menu điều hướng"}
                         aria-expanded={isOpen}
                     >
-                        {isOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
+                        {isOpen ? <X size={24} strokeWidth={1.5} /> : <Menu size={24} strokeWidth={1.5} />}
                     </button>
                 </div>
             </div>
 
             {/* Mobile Nav Dropdown */}
-            {isOpen && (
-                <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="md:hidden absolute top-full left-0 right-0 glass border-b p-4 flex flex-col space-y-4 shadow-xl"
-                    role="menu"
-                >
-                    {navLinks.map((link) => (
-                        <a
-                            key={link.name}
-                            href={link.href}
-                            onClick={() => setIsOpen(false)}
-                            className="text-slate-300 hover:text-cyan-400 font-medium px-4 py-2"
-                            role="menuitem"
-                        >
-                            {link.name}
-                        </a>
-                    ))}
-                    <a
-                        href="#dat-hang"
-                        onClick={() => setIsOpen(false)}
-                        className="mx-4 mt-2 block text-center px-5 py-2.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/50 hover:bg-cyan-500/20 transition-all font-medium text-sm"
-                        role="menuitem"
-                        aria-label="Đặt hàng và đặt lịch tư vấn VinaFC"
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="md:hidden bg-white border-b border-gray-100 overflow-hidden"
+                        role="menu"
                     >
-                        Đặt hàng trước
-                    </a>
-                </motion.div>
-            )}
+                        <div className="px-6 py-4 flex flex-col space-y-6">
+                            {navLinks.map((link) => (
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    onClick={() => setIsOpen(false)}
+                                    className="text-lg text-gray-800 font-medium hover:text-black transition-colors"
+                                    role="menuitem"
+                                >
+                                    {link.name}
+                                </a>
+                            ))}
+                            <div className="flex items-center gap-6 pt-6 border-t border-gray-100">
+                                <button aria-label="Tìm kiếm" className="text-gray-600 hover:text-black transition-colors">
+                                    <Search className="w-6 h-6" strokeWidth={1.5} />
+                                </button>
+                                <button aria-label="Giỏ hàng" className="text-gray-600 hover:text-black transition-colors">
+                                    <ShoppingCart className="w-6 h-6" strokeWidth={1.5} />
+                                </button>
+                                <button aria-label="Tài khoản" className="text-gray-600 hover:text-black transition-colors">
+                                    <User className="w-6 h-6" strokeWidth={1.5} />
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </nav>
     );
 }
