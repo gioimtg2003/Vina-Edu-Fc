@@ -4,8 +4,29 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Wallet, CreditCard, Truck, ChevronRight, Check, ShieldCheck, User, Phone, Home } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { PRODUCTS } from "@/lib/products";
+
+interface Province {
+    id_tinh: string;
+    name_tinh: string;
+}
+
+interface District {
+    id_quan: string;
+    name_quan: string;
+}
+
+interface Ward {
+    id_phuong: string;
+    name_phuong: string;
+}
+
+interface FetchResponse<T> {
+    error: number;
+    data: T[];
+}
 
 const paymentMethods = [
     { id: "vietqr", name: "Chuyển khoản ngân hàng (VietQR)", icon: Wallet },
@@ -39,9 +60,9 @@ export default function CheckoutPage() {
     const [customerPhone, setCustomerPhone] = useState("");
     const [streetAddress, setStreetAddress] = useState("");
 
-    const [provinces, setProvinces] = useState<any[]>([]);
-    const [districts, setDistricts] = useState<any[]>([]);
-    const [wards, setWards] = useState<any[]>([]);
+    const [provinces, setProvinces] = useState<Province[]>([]);
+    const [districts, setDistricts] = useState<District[]>([]);
+    const [wards, setWards] = useState<Ward[]>([]);
 
     const [selectedProvinceId, setSelectedProvinceId] = useState("");
     const [selectedDistrictId, setSelectedDistrictId] = useState("");
@@ -57,10 +78,12 @@ export default function CheckoutPage() {
     useEffect(() => {
         fetch('https://esgoo.net/api-tinhthanh/1/0.htm')
             .then(res => res.json())
-            .then(data => {
+            .then((data: FetchResponse<Province>) => {
                 if (data.error === 0) setProvinces(data.data);
             })
-            .catch(err => console.error("Error fetching provinces:", err));
+            .catch(err => {
+                console.error("Error fetching provinces:", err);
+            });
     }, []);
 
     // Fetch Districts when Province changes
@@ -74,8 +97,11 @@ export default function CheckoutPage() {
         }
         fetch(`https://esgoo.net/api-tinhthanh/2/${selectedProvinceId}.htm`)
             .then(res => res.json())
-            .then(data => {
+            .then((data: FetchResponse<District>) => {
                 if (data.error === 0) setDistricts(data.data);
+            })
+            .catch(err => {
+                console.error("Error fetching districts:", err);
             });
     }, [selectedProvinceId]);
 
@@ -88,8 +114,11 @@ export default function CheckoutPage() {
         }
         fetch(`https://esgoo.net/api-tinhthanh/3/${selectedDistrictId}.htm`)
             .then(res => res.json())
-            .then(data => {
+            .then((data: FetchResponse<Ward>) => {
                 if (data.error === 0) setWards(data.data);
+            })
+            .catch(err => {
+                console.error("Error fetching wards:", err);
             });
     }, [selectedDistrictId]);
 
@@ -154,7 +183,7 @@ export default function CheckoutPage() {
             <div className="min-h-screen bg-slate-50 pt-32 pb-20 text-center font-sans">
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">Không tìm thấy sản phẩm</h1>
                 <p className="text-gray-500 mb-8">Sản phẩm bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.</p>
-                <a href="/#products" className="text-blue-600 hover:underline">Quay lại danh sách sản phẩm</a>
+                <Link href="/#products" className="text-blue-600 hover:underline">Quay lại danh sách sản phẩm</Link>
             </div>
         );
     }
@@ -237,8 +266,8 @@ export default function CheckoutPage() {
                                             }}
                                         >
                                             <option value="">Chọn Tỉnh/Thành</option>
-                                            {provinces.map((p, idx) => (
-                                                <option key={p?.id_tinh ?? idx} value={p.id_tinh}>{p.name_tinh}</option>
+                                            {provinces.map((p: Province) => (
+                                                <option key={p.id_tinh} value={p.id_tinh}>{p.name_tinh}</option>
                                             ))}
                                         </select>
                                         {formErrors.province && <p className="text-red-500 text-xs mt-1">{formErrors.province}</p>}
@@ -256,7 +285,7 @@ export default function CheckoutPage() {
                                             disabled={!selectedProvinceId}
                                         >
                                             <option value="">Chọn Quận/Huyện</option>
-                                            {districts.map(d => (
+                                            {districts.map((d: District) => (
                                                 <option key={d.id_quan} value={d.id_quan}>{d.name_quan}</option>
                                             ))}
                                         </select>
@@ -275,7 +304,7 @@ export default function CheckoutPage() {
                                             disabled={!selectedDistrictId}
                                         >
                                             <option value="">Chọn Phường/Xã</option>
-                                            {wards.map(w => (
+                                            {wards.map((w: Ward) => (
                                                 <option key={w.id_phuong} value={w.id_phuong}>{w.name_phuong}</option>
                                             ))}
                                         </select>
@@ -455,7 +484,7 @@ export default function CheckoutPage() {
 
                             <p className="text-xs text-gray-400 text-center mt-6 font-light leading-relaxed">
                                 Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo<br />
-                                <a href="#" className="text-blue-600 hover:underline">Điều khoản VinaUAV</a>.
+                                <Link href="#" className="text-blue-600 hover:underline">Điều khoản VinaUAV</Link>.
                             </p>
                         </motion.div>
                     </div>
