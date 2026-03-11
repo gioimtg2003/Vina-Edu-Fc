@@ -1,12 +1,8 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { CheckCircle2, Target } from "lucide-react";
-
-const fadeInLeft: Variants = {
-    hidden: { opacity: 0, x: -50 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } },
-};
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const fadeInUp: Variants = {
     hidden: { opacity: 0, y: 30 },
@@ -16,107 +12,107 @@ const fadeInUp: Variants = {
 export default function HeroMission() {
     return (
         <section className="relative w-full bg-white text-gray-900 pb-20">
-            {/* Cinematic Hero Video Area */}
-            <div className="relative w-full h-[70vh] min-h-[600px] overflow-hidden bg-black flex items-center justify-center">
+            {/* Cinematic Hero Video Area - Full Screen */}
+            <div className="relative w-full h-screen min-h-[700px] overflow-hidden bg-[#111] flex flex-col justify-end pb-32">
                 <video
                     autoPlay
                     loop
                     muted
                     playsInline
-                    className="absolute inset-0 w-full h-full object-cover opacity-60"
+                    className="absolute inset-0 w-full h-full object-cover opacity-80"
                 >
                     <source src="/video1.mp4" type="video/mp4" />
                 </video>
-                <div className="relative z-10 container mx-auto px-6 text-center max-w-4xl pt-20">
-                    <motion.h1
+                
+                {/* Overlay text bottom aligned (DJI style) */}
+                <div className="relative z-10 w-full flex flex-col items-center justify-center text-center px-6 mt-auto">
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 leading-tight"
+                        className="mb-8"
                     >
-                        VinaUAV – Nền tảng học lập trình Drone dành cho sinh viên
-                    </motion.h1>
-                    <motion.p
+                        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-4 drop-shadow-lg">
+                            VinaUAV
+                        </h1>
+                        <p className="text-xl md:text-3xl text-gray-200 font-light drop-shadow-md">
+                            Nền tảng học lập trình Drone dành cho sinh viên
+                        </p>
+                    </motion.div>
+
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
-                        className="text-lg md:text-xl text-gray-200 font-light max-w-3xl mx-auto"
+                        className="flex flex-col sm:flex-row gap-6 mt-4"
                     >
-                        Việc tiếp cận các hệ sinh thái UAV như PX4 hay ArduPilot thường gặp rào cản do kiến trúc
-                        phần mềm phức tạp và các lớp hệ điều hành thời gian thực (RTOS) đồ sộ. VinaUAV ra đời
-                        nhằm giải quyết bài toán này: Cung cấp nền tảng Flight Controller (FC) phục vụ giáo dục đi
-                        kèm Firmware mã nguồn mở 100%, cho phép người dùng can thiệp trực tiếp vào lớp điều khiển
-                        thấp (Low-level Control) qua môi trường Arduino IDE.
-                    </motion.p>
+                        <Link 
+                            href="#products" 
+                            className="group flex items-center justify-center gap-2 bg-white text-gray-900 px-8 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors duration-300"
+                        >
+                            Khám phá sản phẩm
+                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                        <Link 
+                            href="#courses" 
+                            className="group flex items-center justify-center gap-2 bg-transparent text-white border border-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors duration-300"
+                        >
+                            Tìm hiểu thêm
+                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </motion.div>
                 </div>
-                {/* Scroll Indicator */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1, duration: 1 }}
-                    className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center"
-                >
-                    <span className="text-white/60 text-sm mb-2 tracking-widest uppercase">Khám phá</span>
-                    <div className="w-[1px] h-12 bg-white/30 overflow-hidden">
-                        <motion.div
-                            className="w-full h-1/2 bg-white"
-                            animate={{ y: ["-100%", "200%"] }}
-                            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-                        />
-                    </div>
-                </motion.div>
             </div>
 
-            {/* Mission Details Section */}
-            <div className="container mx-auto px-6 mt-24 max-w-6xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-                    {/* Features (Đặc điểm thiết kế) */}
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        variants={fadeInLeft}
-                    >
-                        <h2 className="text-3xl font-bold tracking-tight mb-8">Đặc điểm thiết kế</h2>
-                        <ul className="space-y-6">
-                            {[
-                                "Lập trình trực tiếp bằng ngôn ngữ C/C++ trên Arduino IDE.",
-                                "Mã nguồn cấu trúc rõ ràng, dễ đọc và dễ chỉnh sửa.",
-                                "Phù hợp cho sinh viên Điện tử, Tự động hóa, Cơ điện tử nghiên cứu và làm đồ án.",
-                                "Tập trung vào việc thấu hiểu thuật toán cốt lõi thay vì sử dụng các \"hộp đen\" có sẵn.",
-                            ].map((feature, i) => (
-                                <li key={i} className="flex gap-4 items-start">
-                                    <CheckCircle2 className="w-6 h-6 text-slate-800 shrink-0 mt-0.5" strokeWidth={1.5} />
-                                    <span className="text-gray-600 text-lg">{feature}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </motion.div>
+            {/* Mission Details Section (Scroll Reveal) */}
+            <div className="container mx-auto px-6 mt-32 max-w-5xl text-center">
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={fadeInUp}
+                    className="max-w-4xl mx-auto"
+                >
+                    <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-8">Kiến tạo tương lai UAV Việt Nam</h2>
+                    <p className="text-xl text-gray-500 font-light leading-relaxed mb-16">
+                        Việc tiếp cận các hệ sinh thái UAV như PX4 hay ArduPilot thường gặp rào cản do kiến trúc phần mềm phức tạp. VinaUAV giải quyết bài toán này bằng việc cung cấp nền tảng Flight Controller phục vụ giáo dục với phần cứng tối ưu và thư viện lập trình C/C++ trực tiếp qua Arduino IDE.
+                    </p>
+                </motion.div>
 
-                    {/* Goals (Mục tiêu) */}
+                {/* Grid Layout mimicking DJI's feature highlights */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mt-12">
+                    {/* Bento Box 1 */}
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: "-100px" }}
                         variants={fadeInUp}
+                        className="bg-slate-50 rounded-3xl p-10 md:p-14 h-full flex flex-col justify-center border border-slate-100 transition-all hover:bg-slate-100"
                     >
-                        <h2 className="text-3xl font-bold tracking-tight mb-8">Mục tiêu</h2>
-                        <div className="bg-slate-50 rounded-3xl p-8 border border-slate-100">
-                            <ul className="space-y-6">
-                                {[
-                                    "Lập trình thuật toán bay cân bằng (Stabilize).",
-                                    "Lập trình giữ vị trí (Position Hold) kết hợp GPS hoặc Optical Flow.",
-                                    "Xử lý Sensor Fusion và phát triển các hệ thống UAV.",
-                                ].map((goal, i) => (
-                                    <li key={i} className="flex gap-4 items-center">
-                                        <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center shrink-0">
-                                            <Target className="w-5 h-5 text-gray-900" strokeWidth={1.5} />
-                                        </div>
-                                        <span className="text-gray-800 text-lg font-medium">{goal}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                        <h3 className="text-2xl font-bold tracking-tight mb-4">Đặc điểm thiết kế</h3>
+                        <p className="text-gray-600 mb-6 font-light leading-relaxed">
+                            Lập trình trực tiếp bằng ngôn ngữ C/C++ trên Arduino IDE. Mã nguồn cấu trúc rõ ràng, tập trung vào thấu hiểu thuật toán cốt lõi thay vì sử dụng các hệ thống "hộp đen".
+                        </p>
+                        <Link href="#docs" className="text-gray-900 font-medium inline-flex items-center gap-1 hover:underline mt-auto">
+                            Xem tài liệu <ChevronRight className="w-4 h-4" />
+                        </Link>
+                    </motion.div>
+
+                    {/* Bento Box 2 */}
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-100px" }}
+                        variants={fadeInUp}
+                        className="bg-gray-900 text-white rounded-3xl p-10 md:p-14 h-full flex flex-col justify-center transition-all hover:bg-black"
+                    >
+                        <h3 className="text-2xl font-bold tracking-tight mb-4 text-white">Mục tiêu đào tạo</h3>
+                        <p className="text-gray-300 mb-6 font-light leading-relaxed">
+                            Nắm vững lý thuyết phản hồi P-I-D, xử lý Sensor Fusion, lập trình thuật toán cân bằng (Stabilize) và giữ vị trí tĩnh (Position Hold) kết hợp GPS hoặc Optical Flow.
+                        </p>
+                        <Link href="#courses" className="text-white font-medium inline-flex items-center gap-1 hover:underline mt-auto">
+                            Khám phá khóa học <ChevronRight className="w-4 h-4" />
+                        </Link>
                     </motion.div>
                 </div>
             </div>
