@@ -3,7 +3,6 @@
 
 import { motion } from "framer-motion";
 import {
-    ShoppingCart,
     CreditCard,
     ShieldCheck,
     Truck,
