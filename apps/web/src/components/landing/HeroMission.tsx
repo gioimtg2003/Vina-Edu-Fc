@@ -12,7 +12,6 @@ const fadeInUp: Variants = {
 export default function HeroMission() {
     return (
         <section className="relative w-full bg-white text-gray-900 pb-20">
-            {/* Cinematic Hero Video Area - Full Screen */}
             <div className="relative w-full h-screen min-h-[700px] overflow-hidden bg-[#111] flex flex-col justify-end pb-32">
                 <video
                     autoPlay
@@ -23,7 +22,7 @@ export default function HeroMission() {
                 >
                     <source src="/video1.mp4" type="video/mp4" />
                 </video>
-                
+
                 {/* Overlay text bottom aligned (DJI style) */}
                 <div className="relative z-10 w-full flex flex-col items-center justify-center text-center px-6 mt-auto">
                     <motion.div
@@ -46,15 +45,15 @@ export default function HeroMission() {
                         transition={{ duration: 0.8, delay: 0.4 }}
                         className="flex flex-col sm:flex-row gap-6 mt-4"
                     >
-                        <Link 
-                            href="#products" 
+                        <Link
+                            href="#products"
                             className="group flex items-center justify-center gap-2 bg-white text-gray-900 px-8 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors duration-300"
                         >
                             Khám phá sản phẩm
                             <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </Link>
-                        <Link 
-                            href="#courses" 
+                        <Link
+                            href="#courses"
                             className="group flex items-center justify-center gap-2 bg-transparent text-white border border-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors duration-300"
                         >
                             Tìm hiểu thêm
@@ -91,7 +90,7 @@ export default function HeroMission() {
                     >
                         <h3 className="text-2xl font-bold tracking-tight mb-4">Đặc điểm thiết kế</h3>
                         <p className="text-gray-600 mb-6 font-light leading-relaxed">
-                            Lập trình trực tiếp bằng ngôn ngữ C/C++ trên Arduino IDE. Mã nguồn cấu trúc rõ ràng, tập trung vào thấu hiểu thuật toán cốt lõi thay vì sử dụng các hệ thống "hộp đen".
+                            Lập trình trực tiếp bằng ngôn ngữ C/C++ trên Arduino IDE. Mã nguồn cấu trúc rõ ràng, tập trung vào thấu hiểu thuật toán cốt lõi thay vì sử dụng các hệ thống &quot;hộp đen&quot;.
                         </p>
                         <Link href="#docs" className="text-gray-900 font-medium inline-flex items-center gap-1 hover:underline mt-auto">
                             Xem tài liệu <ChevronRight className="w-4 h-4" />
