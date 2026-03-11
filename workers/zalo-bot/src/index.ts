@@ -85,7 +85,8 @@ app.post('/payment', async (c) => {
 
 		try {
 			await sendMessage(c.env.ZALO_BOT_TOKEN, {
-
+				chat_id: chatId,
+				text: `Thanh toán thành công! VinaUAV cảm ơn bạn đã ủng hộ. \nĐơn hàng: ${memo} \nSố tiền: ${amount} VNĐ`
 			});
 
 			console.log("Sent Zalo payment success notification to", chatId);
