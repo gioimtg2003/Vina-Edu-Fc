@@ -21,12 +21,6 @@
                 "argsIgnorePattern": "^_"
             }
         ],
-        "@typescript-eslint/consistent-type-imports": [
-            "error",
-            {
-                "prefer": "type-imports"
-            }
-        ],
         "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-floating-promises": "error",
