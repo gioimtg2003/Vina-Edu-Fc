@@ -50,7 +50,7 @@ export default function HardwareProducts() {
                                 <div className="h-[70%] w-full relative bg-slate-50 flex items-center justify-center p-8">
                                     <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-700 ease-out">
                                         <Image
-                                            src="/images/fc_board.jpg"
+                                            src="/fc_board.jpg"
                                             alt={product.name}
                                             fill
                                             className="object-contain drop-shadow-xl"
@@ -62,12 +62,12 @@ export default function HardwareProducts() {
 
                                 {/* Content Half - 30% Height */}
                                 <div className="h-[30%] p-6 flex flex-col items-center justify-center gap-4 bg-white">
-                                    <h3 className="text-2xl font-bold tracking-tight text-gray-900 text-center">
+                                    <h3 className="tracking-tight text-gray-900 text-center text-lg">
                                         {product.name}
                                     </h3>
-                                    <Button variant="outline" className="rounded-full px-8 hover:bg-slate-50 transition-colors pointer-events-none">
+                                    <span className="font-bold">
                                         Xem ngay
-                                    </Button>
+                                    </span>
                                 </div>
                             </motion.div>
                         </Link>

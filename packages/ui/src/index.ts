@@ -9,6 +9,10 @@ export type { InputProps } from './components/ui/input'
 
 export { Label } from './components/ui/label'
 
+export * from './components/ui/tabs'
+export * from './components/ui/breadcrumb'
+export * from './components/ui/carousel'
+
 export {
     Form,
     FormControl,
