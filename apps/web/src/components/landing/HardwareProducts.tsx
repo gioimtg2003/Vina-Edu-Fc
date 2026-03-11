@@ -53,7 +53,7 @@ const fadeUp: Variants = {
 
 export default function HardwareProducts() {
     return (
-        <section className="relative py-32 bg-white text-gray-900 border-t border-slate-200 overflow-hidden">
+        <section id="products" className="relative py-32 bg-white text-gray-900 border-t border-slate-200 overflow-hidden">
             <div className="container mx-auto px-6 max-w-7xl">
                 {/* Header */}
                 <div className="text-center mb-24 max-w-3xl mx-auto">

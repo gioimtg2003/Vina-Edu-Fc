@@ -41,7 +41,7 @@ const courses = [
 
 export default function CoursesSection() {
     return (
-        <section className="relative py-32 bg-slate-50 text-gray-900 border-t border-slate-200">
+        <section id="courses" className="relative py-32 bg-slate-50 text-gray-900 border-t border-slate-200">
             <div className="container mx-auto px-6 max-w-6xl">
                 {/* Section Header */}
                 <div className="text-center md:max-w-3xl mx-auto mb-20">

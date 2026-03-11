@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function FooterContact() {
     return (
-        <footer className="relative bg-white text-gray-900 border-t border-slate-100 py-24">
+        <footer id="support" className="relative bg-white text-gray-900 border-t border-slate-100 py-24">
             <div className="container mx-auto px-6 max-w-6xl">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-8 items-center">
                     

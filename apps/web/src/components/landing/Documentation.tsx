@@ -27,7 +27,7 @@ export default function Documentation() {
     const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
     return (
-        <section className="relative py-32 bg-slate-50 text-gray-900 border-t border-slate-200">
+        <section id="docs" className="relative py-32 bg-slate-50 text-gray-900 border-t border-slate-200">
             <div className="container mx-auto px-6 max-w-4xl">
                 <div className="text-center mb-16">
                     <motion.div
