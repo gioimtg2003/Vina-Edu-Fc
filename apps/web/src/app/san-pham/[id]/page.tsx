@@ -50,7 +50,7 @@ export default function ProductDetailPage() {
             <div className="min-h-screen bg-slate-50 pt-32 pb-20 text-center font-sans">
                 <h1 className="text-2xl font-bold text-gray-900 mb-4">Không tìm thấy sản phẩm</h1>
                 <p className="text-gray-500 mb-8">Sản phẩm bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.</p>
-                <a href="/#products" className="text-blue-600 hover:underline">Quay lại danh sách sản phẩm</a>
+                <Link href="/#products" className="text-blue-600 hover:underline">Quay lại danh sách sản phẩm</Link>
             </div>
         );
     }
