@@ -8,6 +8,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { PRODUCTS } from "@/lib/products";
 
+export const runtime = 'edge';
+
 interface Province {
     id_tinh: string;
     name_tinh: string;
@@ -33,6 +35,9 @@ const paymentMethods = [
     { id: "ewallet", name: "Ví điện tử (Momo/ZaloPay)", icon: CreditCard },
     { id: "cod", name: "Thanh toán khi nhận hàng (COD)", icon: Truck },
 ];
+
+
+
 
 export default function CheckoutPage() {
     const params = useParams();

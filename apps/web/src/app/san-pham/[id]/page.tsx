@@ -33,6 +33,8 @@ import {
 } from "@vinauav/ui";
 import Link from "next/link";
 
+export const runtime = 'edge';
+
 export default function ProductDetailPage() {
     const params = useParams();
     const router = useRouter();
