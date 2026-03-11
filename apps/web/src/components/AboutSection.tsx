@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Cpu, FileCode2, Zap } from "lucide-react";
+import Image from "next/image";
 
 export default function AboutSection() {
     return (
@@ -71,7 +72,7 @@ export default function AboutSection() {
                         <div className="absolute w-64 h-64 bg-cyan-500/20 rounded-full blur-[80px] group-hover:bg-cyan-500/30 transition-all duration-700"></div>
 
                         <div className="relative z-10 w-48 h-48 border border-cyan-500/50 bg-slate-900/80 backdrop-blur-md rounded-xl flex flex-col items-center justify-center shadow-[0_0_50px_-10px_rgba(6,182,212,0.4)] transform rotate-12 group-hover:rotate-0 transition-transform duration-700">
-                            <img src="/fc_board.jpg" alt="Vina Edu FC - ESP32 drone flight controller board made in Vietnam" className="w-full h-full rounded-xl object-cover" loading="lazy" />
+                            <Image src="/fc_board.jpg" alt="Vina Edu FC - ESP32 drone flight controller board made in Vietnam" className="w-full h-full rounded-xl object-cover" loading="lazy" />
 
                         </div>
 

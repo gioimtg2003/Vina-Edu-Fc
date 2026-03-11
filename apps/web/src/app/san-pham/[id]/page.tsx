@@ -31,6 +31,7 @@ import {
     TabsTrigger,
     TabsContent
 } from "@vinauav/ui";
+import Link from "next/link";
 
 export default function ProductDetailPage() {
     const params = useParams();
@@ -295,14 +296,14 @@ export default function ProductDetailPage() {
                                             'Tài liệu cấu hình PID',
                                             'Firmware v.2.4.0 (Latest)'
                                         ].map((doc, i) => (
-                                            <a
+                                            <Link
                                                 key={i}
                                                 href="#"
                                                 className="flex items-center justify-between p-6 bg-white border border-gray-100 hover:border-black transition-all group"
                                             >
                                                 <span className="text-sm font-bold text-gray-700 tracking-tight">{doc}</span>
                                                 <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-black transition-colors" />
-                                            </a>
+                                            </Link>
                                         ))}
                                     </div>
                                 </div>

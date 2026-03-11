@@ -483,7 +483,7 @@ export default function CheckoutPage() {
                             </button>
 
                             <p className="text-xs text-gray-400 text-center mt-6 font-light leading-relaxed">
-                                Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo<br />
+                                Nhấn &ldquo;Đặt hàng&rdquo; đồng nghĩa với việc bạn đồng ý tuân theo<br />
                                 <Link href="#" className="text-blue-600 hover:underline">Điều khoản VinaUAV</Link>.
                             </p>
                         </motion.div>
