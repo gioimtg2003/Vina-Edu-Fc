@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Wallet, CreditCard, Truck, ChevronRight, Check, ShieldCheck } from "lucide-react";
+import { MapPin, Wallet, CreditCard, Truck, ChevronRight, Check, ShieldCheck, User, Phone, Home } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { PRODUCTS } from "@/lib/products";
@@ -16,10 +16,10 @@ const paymentMethods = [
 export default function CheckoutPage() {
     const params = useParams();
     const productId = Array.isArray(params.id) ? params.id[0] : params.id;
-    
+
     // Find product or fallback
     const matchedProduct = PRODUCTS.find(p => p.id === productId);
-    
+
     const cartItems = matchedProduct ? [
         {
             id: matchedProduct.id,
@@ -33,7 +33,79 @@ export default function CheckoutPage() {
 
     const [selectedPayment, setSelectedPayment] = useState("vietqr");
     const [isProcessing, setIsProcessing] = useState(false);
-    
+
+    // Shipping Form State
+    const [customerName, setCustomerName] = useState("");
+    const [customerPhone, setCustomerPhone] = useState("");
+    const [streetAddress, setStreetAddress] = useState("");
+
+    const [provinces, setProvinces] = useState<any[]>([]);
+    const [districts, setDistricts] = useState<any[]>([]);
+    const [wards, setWards] = useState<any[]>([]);
+
+    const [selectedProvinceId, setSelectedProvinceId] = useState("");
+    const [selectedDistrictId, setSelectedDistrictId] = useState("");
+    const [selectedWardId, setSelectedWardId] = useState("");
+
+    const [selectedProvinceName, setSelectedProvinceName] = useState("");
+    const [selectedDistrictName, setSelectedDistrictName] = useState("");
+    const [selectedWardName, setSelectedWardName] = useState("");
+
+    const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+    // Fetch Provinces on Mount
+    useEffect(() => {
+        fetch('https://esgoo.net/api-tinhthanh/1/0.htm')
+            .then(res => res.json())
+            .then(data => {
+                if (data.error === 0) setProvinces(data.data);
+            })
+            .catch(err => console.error("Error fetching provinces:", err));
+    }, []);
+
+    // Fetch Districts when Province changes
+    useEffect(() => {
+        if (!selectedProvinceId) {
+            setDistricts([]);
+            setWards([]);
+            setSelectedDistrictId("");
+            setSelectedWardId("");
+            return;
+        }
+        fetch(`https://esgoo.net/api-tinhthanh/2/${selectedProvinceId}.htm`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.error === 0) setDistricts(data.data);
+            });
+    }, [selectedProvinceId]);
+
+    // Fetch Wards when District changes
+    useEffect(() => {
+        if (!selectedDistrictId) {
+            setWards([]);
+            setSelectedWardId("");
+            return;
+        }
+        fetch(`https://esgoo.net/api-tinhthanh/3/${selectedDistrictId}.htm`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.error === 0) setWards(data.data);
+            });
+    }, [selectedDistrictId]);
+
+    // Validation
+    const validateForm = () => {
+        const errors: Record<string, string> = {};
+        if (!customerName.trim()) errors.name = "Vui lòng nhập họ tên";
+        if (!customerPhone.trim() || !/^[0-9]{10,11}$/.test(customerPhone)) errors.phone = "Số điện thoại không hợp lệ";
+        if (!selectedProvinceId) errors.province = "Vui lòng chọn Tỉnh/Thành phố";
+        if (!selectedDistrictId) errors.district = "Vui lòng chọn Quận/Huyện";
+        if (!selectedWardId) errors.ward = "Vui lòng chọn Phường/Xã";
+        if (!streetAddress.trim()) errors.street = "Vui lòng nhập địa chỉ cụ thể";
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     // Summary Calculations
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const shippingFee = subtotal > 0 ? 30000 : 0;
@@ -46,16 +118,28 @@ export default function CheckoutPage() {
 
     const handlePlaceOrder = async () => {
         if (total === 0) return;
+        if (!validateForm()) {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            return;
+        }
+
         setIsProcessing(true);
         try {
             const orderId = `VNAFC_${Math.floor(Math.random() * 10000)}`;
-            console.log("Order Placed. Creating record in D1...", orderId);
-            
+            const fullAddress = `${streetAddress}, ${selectedWardName}, ${selectedDistrictName}, ${selectedProvinceName}`;
+
+            console.log("Order Placed:", {
+                orderId,
+                customer: { name: customerName, phone: customerPhone, address: fullAddress },
+                total,
+                paymentMethod: selectedPayment
+            });
+
             // Simulate API delay
             await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            alert(`Đặt hàng thành công! Mã đơn: ${orderId}`);
-            
+
+            alert(`Đặt hàng thành công!\nMã đơn: ${orderId}\nĐịa chỉ nhận: ${fullAddress}`);
+
             // In a real app, redirect:
             // window.location.href = `/checkout/success?orderId=${orderId}`;
         } catch (error) {
@@ -79,9 +163,9 @@ export default function CheckoutPage() {
         <div className="min-h-screen bg-slate-50 pt-24 pb-20 text-gray-900 font-sans selection:bg-blue-100 selection:text-blue-900">
             <div className="container mx-auto px-4 max-w-6xl">
                 {/* Modern DJI-style Checkout Header */}
-                <motion.div 
-                    initial={{ opacity: 0, y: -10 }} 
-                    animate={{ opacity: 1, y: 0 }} 
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
                     className="mb-8 flex items-center gap-3"
                 >
                     <ShieldCheck className="w-8 h-8 text-blue-600" strokeWidth={1.5} />
@@ -89,53 +173,143 @@ export default function CheckoutPage() {
                 </motion.div>
 
                 <div className="flex flex-col lg:flex-row gap-8">
-                    
+
                     {/* Left Column: Details */}
                     <div className="w-full lg:w-2/3 space-y-6">
-                        
+
                         {/* 1. Shipping Address Section */}
-                        <motion.section 
-                            initial={{ opacity: 0, y: 20 }} 
-                            animate={{ opacity: 1, y: 0 }} 
+                        <motion.section
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
                             className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
                         >
                             {/* Shopee-style stripped border top */}
                             <div className="h-1 w-full bg-gradient-to-r from-blue-500 via-transparent to-red-500 opacity-20" />
                             <div className="p-6 md:p-8">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className="flex items-center gap-2 text-blue-600 font-medium">
-                                        <MapPin className="w-5 h-5" strokeWidth={2} />
-                                        <h2 className="text-lg uppercase tracking-wider">Địa chỉ nhận hàng</h2>
-                                    </div>
-                                    <button className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
-                                        Thay đổi
-                                    </button>
+                                <div className="flex items-center gap-2 text-blue-600 font-medium mb-6">
+                                    <MapPin className="w-5 h-5" strokeWidth={2} />
+                                    <h2 className="text-lg uppercase tracking-wider">Địa chỉ giao hàng</h2>
                                 </div>
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-base">
-                                    <div className="font-bold text-gray-900 whitespace-nowrap">
-                                        Nguyễn Văn A (+84) 912 345 678
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    {/* Name Input */}
+                                    <div className="space-y-1">
+                                        <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                            <User className="w-4 h-4 text-gray-400" /> Họ và tên
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={customerName}
+                                            onChange={e => setCustomerName(e.target.value)}
+                                            placeholder="VD: Nguyễn Văn A"
+                                            className={`w-full px-4 py-2.5 rounded-lg border bg-gray-50 focus:bg-white transition-colors outline-none focus:ring-2 focus:ring-blue-100 ${formErrors.name ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-blue-500'}`}
+                                        />
+                                        {formErrors.name && <p className="text-red-500 text-xs mt-1">{formErrors.name}</p>}
                                     </div>
-                                    <div className="text-gray-600 font-light flex-1">
-                                        Tòa nhà Innovation, Khu Công Nghệ Cao, Tân Phú, Quận 9, TP. Hồ Chí Minh
-                                    </div>
-                                    <div className="inline-flex px-2 py-0.5 border border-blue-600 text-blue-600 text-xs font-medium rounded-sm whitespace-nowrap w-fit">
-                                        Mặc định
+
+                                    {/* Phone Input */}
+                                    <div className="space-y-1">
+                                        <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                            <Phone className="w-4 h-4 text-gray-400" /> Số điện thoại
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            value={customerPhone}
+                                            onChange={e => setCustomerPhone(e.target.value)}
+                                            placeholder="VD: 0912345678"
+                                            className={`w-full px-4 py-2.5 rounded-lg border bg-gray-50 focus:bg-white transition-colors outline-none focus:ring-2 focus:ring-blue-100 ${formErrors.phone ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-blue-500'}`}
+                                        />
+                                        {formErrors.phone && <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>}
                                     </div>
                                 </div>
+
+                                {/* Vietnam Address API Selectors */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                    <div className="space-y-1">
+                                        <label className="text-sm font-medium text-gray-700">Tỉnh/Thành phố</label>
+                                        <select
+                                            className={`w-full px-4 py-2.5 rounded-lg border bg-gray-50 focus:bg-white transition-colors outline-none focus:ring-2 focus:ring-blue-100 ${formErrors.province ? 'border-red-400' : 'border-gray-200'}`}
+                                            value={selectedProvinceId}
+                                            onChange={e => {
+                                                setSelectedProvinceId(e.target.value);
+                                                setSelectedProvinceName(e.target.options[e.target.selectedIndex]?.text || "");
+                                            }}
+                                        >
+                                            <option value="">Chọn Tỉnh/Thành</option>
+                                            {provinces.map((p, idx) => (
+                                                <option key={p?.id_tinh ?? idx} value={p.id_tinh}>{p.name_tinh}</option>
+                                            ))}
+                                        </select>
+                                        {formErrors.province && <p className="text-red-500 text-xs mt-1">{formErrors.province}</p>}
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <label className="text-sm font-medium text-gray-700">Quận/Huyện</label>
+                                        <select
+                                            className={`w-full px-4 py-2.5 rounded-lg border bg-gray-50 focus:bg-white transition-colors outline-none focus:ring-2 focus:ring-blue-100 ${formErrors.district ? 'border-red-400' : 'border-gray-200'}`}
+                                            value={selectedDistrictId}
+                                            onChange={e => {
+                                                setSelectedDistrictId(e.target.value);
+                                                setSelectedDistrictName(e.target.options[e.target.selectedIndex]?.text || "");
+                                            }}
+                                            disabled={!selectedProvinceId}
+                                        >
+                                            <option value="">Chọn Quận/Huyện</option>
+                                            {districts.map(d => (
+                                                <option key={d.id_quan} value={d.id_quan}>{d.name_quan}</option>
+                                            ))}
+                                        </select>
+                                        {formErrors.district && <p className="text-red-500 text-xs mt-1">{formErrors.district}</p>}
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <label className="text-sm font-medium text-gray-700">Phường/Xã</label>
+                                        <select
+                                            className={`w-full px-4 py-2.5 rounded-lg border bg-gray-50 focus:bg-white transition-colors outline-none focus:ring-2 focus:ring-blue-100 ${formErrors.ward ? 'border-red-400' : 'border-gray-200'}`}
+                                            value={selectedWardId}
+                                            onChange={e => {
+                                                setSelectedWardId(e.target.value);
+                                                setSelectedWardName(e.target.options[e.target.selectedIndex]?.text || "");
+                                            }}
+                                            disabled={!selectedDistrictId}
+                                        >
+                                            <option value="">Chọn Phường/Xã</option>
+                                            {wards.map(w => (
+                                                <option key={w.id_phuong} value={w.id_phuong}>{w.name_phuong}</option>
+                                            ))}
+                                        </select>
+                                        {formErrors.ward && <p className="text-red-500 text-xs mt-1">{formErrors.ward}</p>}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1">
+                                    <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                        <Home className="w-4 h-4 text-gray-400" /> Tòa nhà, Tên đường...
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={streetAddress}
+                                        onChange={e => setStreetAddress(e.target.value)}
+                                        placeholder="VD: Số 1 Đường số 2, Tòa nhà ABC..."
+                                        className={`w-full px-4 py-2.5 rounded-lg border bg-gray-50 focus:bg-white transition-colors outline-none focus:ring-2 focus:ring-blue-100 ${formErrors.street ? 'border-red-400 focus:border-red-500' : 'border-gray-200 focus:border-blue-500'}`}
+                                    />
+                                    {formErrors.street && <p className="text-red-500 text-xs mt-1">{formErrors.street}</p>}
+                                </div>
+
                             </div>
                         </motion.section>
 
                         {/* 2. Product List Section */}
-                        <motion.section 
-                            initial={{ opacity: 0, y: 20 }} 
-                            animate={{ opacity: 1, y: 0 }} 
+                        <motion.section
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
                             className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
                         >
                             <div className="p-6 md:p-8">
                                 <h2 className="text-xl font-bold tracking-tight text-gray-900 mb-6">Sản phẩm</h2>
-                                
+
                                 {/* Header Row (Desktop only) */}
                                 <div className="hidden md:grid grid-cols-12 gap-4 text-sm font-medium text-gray-400 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100">
                                     <div className="col-span-6">Sản phẩm</div>
@@ -150,10 +324,10 @@ export default function CheckoutPage() {
                                         <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center group">
                                             <div className="col-span-1 md:col-span-6 flex items-start gap-4">
                                                 <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-slate-50 border border-slate-100 shrink-0">
-                                                    <Image 
-                                                        src={item.image} 
-                                                        alt={item.name} 
-                                                        fill 
+                                                    <Image
+                                                        src={item.image}
+                                                        alt={item.name}
+                                                        fill
                                                         className="object-contain p-2 mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
                                                     />
                                                 </div>
@@ -162,7 +336,7 @@ export default function CheckoutPage() {
                                                     <span className="text-sm font-light text-gray-500 mt-1">Phân loại: {item.variant}</span>
                                                 </div>
                                             </div>
-                                            
+
                                             {/* Mobile layout helpers */}
                                             <div className="col-span-1 md:hidden flex justify-between items-center text-sm">
                                                 <span className="text-gray-500">Đơn giá:</span>
@@ -191,9 +365,9 @@ export default function CheckoutPage() {
                         </motion.section>
 
                         {/* 3. Payment Method Section */}
-                        <motion.section 
-                            initial={{ opacity: 0, y: 20 }} 
-                            animate={{ opacity: 1, y: 0 }} 
+                        <motion.section
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
                             className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
                         >
@@ -206,11 +380,10 @@ export default function CheckoutPage() {
                                             <button
                                                 key={method.id}
                                                 onClick={() => setSelectedPayment(method.id)}
-                                                className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all duration-300 ${
-                                                    isSelected 
-                                                        ? "border-blue-600 bg-blue-50/30 text-blue-900 shadow-sm" 
-                                                        : "border-gray-100 hover:border-gray-200 hover:bg-gray-50 text-gray-600"
-                                                }`}
+                                                className={`relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all duration-300 ${isSelected
+                                                    ? "border-blue-600 bg-blue-50/30 text-blue-900 shadow-sm"
+                                                    : "border-gray-100 hover:border-gray-200 hover:bg-gray-50 text-gray-600"
+                                                    }`}
                                             >
                                                 {isSelected && (
                                                     <div className="absolute top-3 right-3 text-blue-600">
@@ -230,14 +403,14 @@ export default function CheckoutPage() {
 
                     {/* Right Column: Order Summary & Action */}
                     <div className="w-full lg:w-1/3">
-                        <motion.div 
-                            initial={{ opacity: 0, x: 20 }} 
-                            animate={{ opacity: 1, x: 0 }} 
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.4 }}
                             className="sticky top-24 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8"
                         >
                             <h2 className="text-xl font-bold tracking-tight text-gray-900 mb-6 border-b border-gray-100 pb-4">Tổng thanh toán</h2>
-                            
+
                             <div className="space-y-4 mb-6">
                                 <div className="flex justify-between text-gray-600 font-light">
                                     <span>Tổng tiền hàng</span>
@@ -265,7 +438,7 @@ export default function CheckoutPage() {
                                 </div>
                             </div>
 
-                            <button 
+                            <button
                                 onClick={handlePlaceOrder}
                                 disabled={isProcessing || total === 0}
                                 className="w-full py-4 rounded-full bg-blue-600 text-white font-bold text-lg shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:shadow-blue-600/40 transition-all duration-300 disabled:opacity-70 flex justify-center items-center gap-2 group"
@@ -281,7 +454,7 @@ export default function CheckoutPage() {
                             </button>
 
                             <p className="text-xs text-gray-400 text-center mt-6 font-light leading-relaxed">
-                                Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo<br/>
+                                Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo<br />
                                 <a href="#" className="text-blue-600 hover:underline">Điều khoản VinaUAV</a>.
                             </p>
                         </motion.div>

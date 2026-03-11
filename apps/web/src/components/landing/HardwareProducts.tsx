@@ -1,10 +1,10 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { ChevronRight, Cpu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { PRODUCTS } from "@/lib/products";
+import { Button } from "@vinauav/ui";
 
 const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
@@ -13,17 +13,17 @@ const fadeUp: Variants = {
 
 export default function HardwareProducts() {
     return (
-        <section id="products" className="relative py-32 bg-white text-gray-900 border-t border-slate-200 overflow-hidden">
+        <section id="products" className="relative py-24 bg-white text-gray-900 border-t border-slate-200 overflow-hidden">
             <div className="container mx-auto px-6 max-w-7xl">
                 {/* Header */}
-                <div className="text-center mb-24 max-w-3xl mx-auto">
+                <div className="text-center mb-16 max-w-3xl mx-auto">
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: "-100px" }}
                         variants={fadeUp}
                     >
-                        <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-8 text-gray-900">
+                        <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 text-gray-900">
                             Sản phẩm & Phần cứng
                         </h2>
                         <p className="text-xl text-gray-500 font-light leading-relaxed">
@@ -33,93 +33,45 @@ export default function HardwareProducts() {
                     </motion.div>
                 </div>
 
-                {/* Products Array */}
-                <div className="space-y-32">
-                    {PRODUCTS.map((product, index) => {
-                        const isEven = index % 2 === 0;
-
-                        return (
+                {/* Products Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {PRODUCTS.map((product, index) => (
+                        <Link href={`/san-pham/${product.id}`} key={product.id} className="block group">
                             <motion.div
-                                key={product.id}
                                 initial="hidden"
                                 whileInView="visible"
-                                viewport={{ once: true, margin: "-100px" }}
+                                viewport={{ once: true, margin: "-50px" }}
                                 variants={fadeUp}
-                                className={`flex flex-col md:flex-row items-center gap-12 lg:gap-20 ${isEven ? "" : "md:flex-row-reverse"
-                                    }`}
+                                whileHover={{ scale: 1.03 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col h-[450px] border border-slate-100"
                             >
-                                {/* Image Half */}
-                                <div className="w-full md:w-1/2 group relative">
-                                    <div className="absolute inset-0 bg-slate-100 rounded-3xl transform group-hover:scale-105 transition-transform duration-700 ease-out -z-10" />
-                                    <div className="relative aspect-square md:aspect-[4/3] w-full rounded-3xl overflow-hidden bg-slate-50 flex items-center justify-center p-8">
-                                        {/* Mock image container to mimic DJI product shot */}
-                                        <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-1000 ease-out">
-                                            <Image
-                                                src={product.image}
-                                                alt={product.name}
-                                                fill
-                                                className="object-contain filter drop-shadow-2xl"
-                                                sizes="(max-width: 768px) 100vw, 50vw"
-                                                priority={index === 0}
-                                            />
-                                        </div>
+                                {/* Image Half - 70% Height */}
+                                <div className="h-[70%] w-full relative bg-slate-50 flex items-center justify-center p-8">
+                                    <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-700 ease-out">
+                                        <Image
+                                            src="/images/fc_board.jpg"
+                                            alt={product.name}
+                                            fill
+                                            className="object-contain drop-shadow-xl"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            priority={index === 0}
+                                        />
                                     </div>
                                 </div>
 
-                                {/* Text Half */}
-                                <div className="w-full md:w-1/2 flex flex-col justify-center">
-                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100/80 text-gray-600 text-sm font-medium mb-6 w-fit">
-                                        <Cpu className="w-4 h-4" />
-                                        <span>Flight Controller / C/C++</span>
-                                    </div>
-
-                                    <h3 className="text-4xl lg:text-5xl font-bold tracking-tight mb-2 text-gray-900">
+                                {/* Content Half - 30% Height */}
+                                <div className="h-[30%] p-6 flex flex-col items-center justify-center gap-4 bg-white">
+                                    <h3 className="text-2xl font-bold tracking-tight text-gray-900 text-center">
                                         {product.name}
                                     </h3>
-                                    <p className="text-xl font-light text-gray-500 mb-6 uppercase tracking-wider">
-                                        {product.version}
-                                    </p>
-
-                                    <p className="text-lg text-gray-600 font-light leading-relaxed mb-8">
-                                        {product.description}
-                                    </p>
-
-                                    {/* Tech Specs Bento-style */}
-                                    <div className="grid grid-cols-1 gap-4 mb-10">
-                                        {product.specs.map((spec, i) => (
-                                            <div
-                                                key={i}
-                                                className="flex flex-col py-3 border-b border-gray-100"
-                                            >
-                                                <span className="text-sm font-medium text-gray-900 mb-1 tracking-wider uppercase">
-                                                    {spec.label}
-                                                </span>
-                                                <span className="text-gray-500 font-light">{spec.value}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                                        <div className="flex flex-col">
-                                            <span className="text-sm font-medium text-gray-500 uppercase tracking-widest mb-1">
-                                                Giá bán lẻ
-                                            </span>
-                                            <span className="text-xl font-bold text-gray-900">
-                                                {product.price}
-                                            </span>
-                                        </div>
-                                        <Link 
-                                            href={`/checkout/${product.id}`}
-                                            className="flex items-center justify-center gap-2 bg-gray-900 text-white px-8 py-4 rounded-full font-medium hover:bg-black transition-colors hover:shadow-lg group"
-                                        >
-                                            MUA NGAY
-                                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                        </Link>
-                                    </div>
+                                    <Button variant="outline" className="rounded-full px-8 hover:bg-slate-50 transition-colors pointer-events-none">
+                                        Xem ngay
+                                    </Button>
                                 </div>
                             </motion.div>
-                        );
-                    })}
+                        </Link>
+                    ))}
                 </div>
             </div>
         </section>
