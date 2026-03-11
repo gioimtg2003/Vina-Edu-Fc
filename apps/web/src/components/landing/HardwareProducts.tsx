@@ -3,48 +3,8 @@
 import { motion, Variants } from "framer-motion";
 import { ChevronRight, Cpu } from "lucide-react";
 import Image from "next/image";
-
-const products = [
-    {
-        name: "VinaFC 1",
-        version: "Bản Cơ bản",
-        description:
-            "Nền tảng khởi đầu giúp sinh viên thực hành thuật toán PID, Sensor Fusion và bay tự động cơ bản.",
-        specs: [
-            { label: "Vi điều khiển", value: "ESP32 (Dual core 240MHz)" },
-            { label: "Cảm biến", value: "IMU ICM20602 (Accel + Gyro), Baro BMP388" },
-            { label: "Ngoại vi", value: "2 cổng UART, hỗ trợ phần cứng GPS và Optical Flow (MTF01/MAVLink APM)" },
-        ],
-        price: "Mạch PCB: 250k | Hoàn thiện: 600k",
-        image: "/fc_board.jpg",
-    },
-    {
-        name: "VinaFC 1 Plus",
-        version: "Bản Nâng cấp",
-        description:
-            "Cải thiện độ ổn định và độ tin cậy của dữ liệu với cảm biến chuẩn công nghiệp, đáp ứng môi trường phức tạp.",
-        specs: [
-            { label: "Vi điều khiển", value: "ESP32 (Dual core 240MHz)" },
-            { label: "Cảm biến", value: "IMU BMI088 (Chuẩn CN), Baro BMP388" },
-            { label: "Ngoại vi", value: "2 cổng UART, hỗ trợ phần cứng GPS và Optical Flow" },
-        ],
-        price: "Mạch PCB: 250k | Hoàn thiện: 700k",
-        image: "/fc_board.jpg",
-    },
-    {
-        name: "VinaFC 1 Pro",
-        version: "Bản Chuyên sâu",
-        description:
-            "Phiên bản hiệu năng cao, trang bị hệ thống IMU kép, đáp ứng yêu cầu xử lý đồ án chuyên sâu và UAV phức tạp.",
-        specs: [
-            { label: "Vi điều khiển", value: "Teensy 4.1 (600MHz)" },
-            { label: "Cảm biến kép", value: "BMI088 + ICM45686, Baro BMP388" },
-            { label: "Ngoại vi", value: "7 cổng UART, hỗ trợ GPS và Optical Flow" },
-        ],
-        price: "Hoàn thiện: 3.000.000 VNĐ",
-        image: "/fc_board.jpg",
-    },
-];
+import Link from "next/link";
+import { PRODUCTS } from "@/lib/products";
 
 const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
@@ -75,12 +35,12 @@ export default function HardwareProducts() {
 
                 {/* Products Array */}
                 <div className="space-y-32">
-                    {products.map((product, index) => {
+                    {PRODUCTS.map((product, index) => {
                         const isEven = index % 2 === 0;
 
                         return (
                             <motion.div
-                                key={product.name}
+                                key={product.id}
                                 initial="hidden"
                                 whileInView="visible"
                                 viewport={{ once: true, margin: "-100px" }}
@@ -148,10 +108,13 @@ export default function HardwareProducts() {
                                                 {product.price}
                                             </span>
                                         </div>
-                                        <button className="flex items-center justify-center gap-2 bg-gray-900 text-white px-8 py-4 rounded-full font-medium hover:bg-black transition-colors hover:shadow-lg group">
+                                        <Link 
+                                            href={`/checkout/${product.id}`}
+                                            className="flex items-center justify-center gap-2 bg-gray-900 text-white px-8 py-4 rounded-full font-medium hover:bg-black transition-colors hover:shadow-lg group"
+                                        >
                                             MUA NGAY
                                             <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                        </button>
+                                        </Link>
                                     </div>
                                 </div>
                             </motion.div>

@@ -1,30 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { MapPin, Wallet, CreditCard, Truck, ChevronRight, Check, ShieldCheck } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-
-// Demo Product Data
-const cartItems = [
-    {
-        id: "p1",
-        name: "Bộ điều khiển bay VinaFC 1 Pro",
-        variant: "Bản Chuyên sâu - Hoàn thiện",
-        price: 3000000,
-        quantity: 1,
-        image: "/fc_board.jpg",
-    },
-    {
-        id: "p2",
-        name: "Module GPS M10",
-        variant: "Tích hợp La bàn",
-        price: 450000,
-        quantity: 1,
-        image: "/fc_board.jpg",
-    }
-];
+import { useParams } from "next/navigation";
+import { PRODUCTS } from "@/lib/products";
 
 const paymentMethods = [
     { id: "vietqr", name: "Chuyển khoản ngân hàng (VietQR)", icon: Wallet },
@@ -33,13 +14,29 @@ const paymentMethods = [
 ];
 
 export default function CheckoutPage() {
-    const router = useRouter();
+    const params = useParams();
+    const productId = Array.isArray(params.id) ? params.id[0] : params.id;
+    
+    // Find product or fallback
+    const matchedProduct = PRODUCTS.find(p => p.id === productId);
+    
+    const cartItems = matchedProduct ? [
+        {
+            id: matchedProduct.id,
+            name: matchedProduct.name,
+            variant: matchedProduct.version,
+            price: matchedProduct.basePrice,
+            quantity: 1,
+            image: matchedProduct.image,
+        }
+    ] : [];
+
     const [selectedPayment, setSelectedPayment] = useState("vietqr");
     const [isProcessing, setIsProcessing] = useState(false);
     
     // Summary Calculations
     const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const shippingFee = 30000;
+    const shippingFee = subtotal > 0 ? 30000 : 0;
     const discount = 0;
     const total = subtotal + shippingFee - discount;
 
@@ -48,21 +45,19 @@ export default function CheckoutPage() {
     };
 
     const handlePlaceOrder = async () => {
+        if (total === 0) return;
         setIsProcessing(true);
         try {
-            // Conceptual logic
-            // 1. Triggers the creation of a record in Cloudflare D1.
-            // 2. Generates a unique Memo (e.g., VNAFC_123).
             const orderId = `VNAFC_${Math.floor(Math.random() * 10000)}`;
             console.log("Order Placed. Creating record in D1...", orderId);
             
             // Simulate API delay
             await new Promise(resolve => setTimeout(resolve, 1500));
             
-            // 3. Redirects to a "Payment Success/QR" page.
-            // router.push(`/checkout/success?orderId=${orderId}`);
             alert(`Đặt hàng thành công! Mã đơn: ${orderId}`);
             
+            // In a real app, redirect:
+            // window.location.href = `/checkout/success?orderId=${orderId}`;
         } catch (error) {
             console.error("Lỗi đặt hàng:", error);
         } finally {
@@ -70,10 +65,19 @@ export default function CheckoutPage() {
         }
     };
 
+    if (!matchedProduct) {
+        return (
+            <div className="min-h-screen bg-slate-50 pt-32 pb-20 text-center font-sans">
+                <h1 className="text-2xl font-bold text-gray-900 mb-4">Không tìm thấy sản phẩm</h1>
+                <p className="text-gray-500 mb-8">Sản phẩm bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.</p>
+                <a href="/#products" className="text-blue-600 hover:underline">Quay lại danh sách sản phẩm</a>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-slate-50 pt-24 pb-20 text-gray-900 font-sans selection:bg-blue-100 selection:text-blue-900">
             <div className="container mx-auto px-4 max-w-6xl">
-                
                 {/* Modern DJI-style Checkout Header */}
                 <motion.div 
                     initial={{ opacity: 0, y: -10 }} 
@@ -263,7 +267,7 @@ export default function CheckoutPage() {
 
                             <button 
                                 onClick={handlePlaceOrder}
-                                disabled={isProcessing}
+                                disabled={isProcessing || total === 0}
                                 className="w-full py-4 rounded-full bg-blue-600 text-white font-bold text-lg shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:shadow-blue-600/40 transition-all duration-300 disabled:opacity-70 flex justify-center items-center gap-2 group"
                             >
                                 {isProcessing ? (
