@@ -14,5 +14,7 @@ export interface BlogPost {
   category: BlogCategory;
   date: string;
   readTime: string;
+  author: string;
+  updatedAt?: string;
   featured?: boolean;
 }

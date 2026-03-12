@@ -8,6 +8,8 @@ export { Input } from './components/ui/input'
 export type { InputProps } from './components/ui/input'
 
 export { Label } from './components/ui/label'
+export { Badge } from './components/ui/badge'
+export type { BadgeProps } from './components/ui/badge'
 
 export * from './components/ui/tabs'
 export * from './components/ui/breadcrumb'
