@@ -4,8 +4,6 @@ import { setRequestLocale } from "next-intl/server";
 import { BLOG_POSTS } from "@/lib/blog";
 import BlogDetailView from "@/components/blog/BlogDetailView";
 
-export const runtime = 'edge';
-
 interface BlogPageProps {
   params: Promise<{ locale: string; slug: string }>;
 }
