@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { MapPin, Wallet, CreditCard, Truck, ChevronRight, Check, ShieldCheck, User, Phone, Home } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { PRODUCTS } from "@/lib/products";
+import { setRequestLocale } from "next-intl/server";
 
 export const runtime = 'edge';
 
@@ -39,9 +39,15 @@ const paymentMethods = [
 
 
 
-export default function CheckoutPage() {
-    const params = useParams();
-    const productId = Array.isArray(params.id) ? params.id[0] : params.id;
+
+
+export default async function CheckoutPage({
+    params,
+}: {
+    params: Promise<{ id: string; locale: string }>;
+}) {
+    const { locale, id: productId } = await params;
+    setRequestLocale(locale);
 
     // Find product or fallback
     const matchedProduct = PRODUCTS.find(p => p.id === productId);

@@ -1,0 +1,11 @@
+{
+    "common": {
+        "title": "VinaFlightControl",
+        "nav": {
+            "products": "Products",
+            "courses": "Courses",
+            "docs": "Docs",
+            "support": "Support"
+        }
+    }
+}

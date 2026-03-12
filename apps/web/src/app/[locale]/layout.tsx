@@ -3,6 +3,10 @@ import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import NavigationBar from '@/components/NavigationBar'
 import FooterContact from '@/components/landing/FooterContact'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages, setRequestLocale } from 'next-intl/server'
+import { notFound } from 'next/navigation'
+import { routing } from '@/i18n/routing'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -55,13 +59,29 @@ const jsonLd = {
     ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
+    params,
 }: Readonly<{
     children: React.ReactNode
+    params: Promise<{ locale: string }>
 }>) {
+    const { locale } = await params;
+
+    // Ensure that the incoming `locale` is valid
+    if (!routing.locales.includes(locale as any)) {
+        notFound();
+    }
+
+    // Enable static rendering
+    setRequestLocale(locale);
+
+    // Providing all messages to the client
+    // side is the easiest way to get started
+    const messages = await getMessages();
+
     return (
-        <html lang="en" className="dark" suppressHydrationWarning>
+        <html lang={locale} className="dark" suppressHydrationWarning>
             <body
                 className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
             >
@@ -69,12 +89,13 @@ export default function RootLayout({
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
-                <main className="min-h-screen relative bg-white text-gray-900 selection:bg-slate-200 selection:text-gray-900 overflow-hidden font-sans">
-                    <NavigationBar />
-                    {children}
-                    <FooterContact />
-
-                </main>
+                <NextIntlClientProvider messages={messages}>
+                    <main className="min-h-screen relative bg-white text-gray-900 selection:bg-slate-200 selection:text-gray-900 overflow-hidden font-sans">
+                        <NavigationBar />
+                        {children}
+                        <FooterContact />
+                    </main>
+                </NextIntlClientProvider>
             </body>
         </html>
     )

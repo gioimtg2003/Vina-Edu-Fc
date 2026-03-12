@@ -2,10 +2,16 @@ import HeroMission from "@/components/landing/HeroMission";
 import CoursesSection from "@/components/landing/CoursesSection";
 import HardwareProducts from "@/components/landing/HardwareProducts";
 import Documentation from "@/components/landing/Documentation";
+import { setRequestLocale } from "next-intl/server";
 
+export default async function Home({
+    params,
+}: {
+    params: Promise<{ locale: string }>;
+}) {
+    const { locale } = await params;
+    setRequestLocale(locale);
 
-
-export default function Home() {
     return (
         <>
 

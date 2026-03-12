@@ -10,7 +10,7 @@ import {
     Home
 } from "lucide-react";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { PRODUCTS } from "@/lib/products";
 
 import {
@@ -35,10 +35,18 @@ import Link from "next/link";
 
 export const runtime = 'edge';
 
-export default function ProductDetailPage() {
-    const params = useParams();
+import { setRequestLocale } from "next-intl/server";
+
+export default async function ProductDetailPage({
+    params,
+}: {
+    params: Promise<{ id: string; locale: string }>;
+}) {
+    const { locale, id } = await params;
+    setRequestLocale(locale);
+
     const router = useRouter();
-    const productId = Array.isArray(params.id) ? params.id[0] : params.id;
+    const productId = id;
 
     // Find product or fallback
     const matchedProduct = PRODUCTS.find(p => p.id === productId);

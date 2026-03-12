@@ -1,0 +1,11 @@
+{
+    "common": {
+        "title": "VinaFlightControl",
+        "nav": {
+            "products": "Sản phẩm",
+            "courses": "Khóa học",
+            "docs": "Tài liệu",
+            "support": "Hỗ trợ"
+        }
+    }
+}

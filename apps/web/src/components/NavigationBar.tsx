@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Search, User, ShoppingCart } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 export default function NavigationBar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -71,9 +72,12 @@ export default function NavigationBar() {
                     <button aria-label="Giỏ hàng" className={`hover:text-black transition-colors ${scrolled ? 'text-gray-600' : 'text-gray-800'}`}>
                         <ShoppingCart className="w-5 h-5" strokeWidth={1.5} />
                     </button>
-                    <button aria-label="Tài khoản" className={`hover:text-black transition-colors ${scrolled ? 'text-gray-600' : 'text-gray-800'}`}>
-                        <User className="w-5 h-5" strokeWidth={1.5} />
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <LocaleSwitcher />
+                        <button aria-label="Tài khoản" className={`hover:text-black transition-colors ${scrolled ? 'text-gray-600' : 'text-gray-800'}`}>
+                            <User className="w-5 h-5" strokeWidth={1.5} />
+                        </button>
+                    </div>
                 </div>
 
                 {/* Mobile menu button */}
@@ -112,16 +116,19 @@ export default function NavigationBar() {
                                     {link.name}
                                 </a>
                             ))}
-                            <div className="flex items-center gap-6 pt-6 border-t border-gray-100">
-                                <button aria-label="Tìm kiếm" className="text-gray-600 hover:text-black transition-colors">
-                                    <Search className="w-6 h-6" strokeWidth={1.5} />
-                                </button>
-                                <button aria-label="Giỏ hàng" className="text-gray-600 hover:text-black transition-colors">
-                                    <ShoppingCart className="w-6 h-6" strokeWidth={1.5} />
-                                </button>
-                                <button aria-label="Tài khoản" className="text-gray-600 hover:text-black transition-colors">
-                                    <User className="w-6 h-6" strokeWidth={1.5} />
-                                </button>
+                             <div className="flex items-center justify-between pt-6 border-t border-gray-100">
+                                <div className="flex items-center gap-6">
+                                    <button aria-label="Tìm kiếm" className="text-gray-600 hover:text-black transition-colors">
+                                        <Search className="w-6 h-6" strokeWidth={1.5} />
+                                    </button>
+                                    <button aria-label="Giỏ hàng" className="text-gray-600 hover:text-black transition-colors">
+                                        <ShoppingCart className="w-6 h-6" strokeWidth={1.5} />
+                                    </button>
+                                    <button aria-label="Tài khoản" className="text-gray-600 hover:text-black transition-colors">
+                                        <User className="w-6 h-6" strokeWidth={1.5} />
+                                    </button>
+                                </div>
+                                <LocaleSwitcher />
                             </div>
                         </div>
                     </motion.div>
