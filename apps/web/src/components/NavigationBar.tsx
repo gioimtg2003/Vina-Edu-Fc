@@ -26,6 +26,7 @@ export default function NavigationBar() {
         { name: t("products"), href: "#products" },
         { name: t("courses"), href: "#courses" },
         { name: t("docs"), href: "#docs" },
+        { name: t("blog"), href: "/tin-tuc" },
         { name: t("support"), href: "#support" },
     ];
 
@@ -51,19 +52,27 @@ export default function NavigationBar() {
 
                 {/* Desktop Nav Center */}
                 <div className="hidden md:flex items-center justify-center space-x-10 absolute left-1/2 -translate-x-1/2">
-                    {navLinks.map((link, i) => (
-                        <motion.a
-                            key={link.name}
-                            href={link.href}
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.1, duration: 0.5 }}
-                            className={`text-sm font-medium transition-colors hover:text-black ${scrolled ? 'text-gray-600' : 'text-gray-800'
-                                }`}
-                        >
-                            {link.name}
-                        </motion.a>
-                    ))}
+                    {navLinks.map((link, i) => {
+                        const isHash = link.href.startsWith("#");
+                        const Component = isHash ? "a" : Link;
+                        
+                        return (
+                            <motion.div
+                                key={link.name}
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.1, duration: 0.5 }}
+                            >
+                                <Component
+                                    href={link.href}
+                                    className={`text-sm font-medium transition-colors hover:text-black ${scrolled ? 'text-gray-600' : 'text-gray-800'
+                                        }`}
+                                >
+                                    {link.name}
+                                </Component>
+                            </motion.div>
+                        );
+                    })}
                 </div>
 
                 {/* Desktop Right Utilities */}
@@ -107,18 +116,23 @@ export default function NavigationBar() {
                         role="menu"
                     >
                         <div className="px-6 py-4 flex flex-col space-y-6">
-                            {navLinks.map((link) => (
-                                <a
-                                    key={link.name}
-                                    href={link.href}
-                                    onClick={() => setIsOpen(false)}
-                                    className="text-lg text-gray-800 font-medium hover:text-black transition-colors"
-                                    role="menuitem"
-                                >
-                                    {link.name}
-                                </a>
-                            ))}
-                             <div className="flex items-center justify-between pt-6 border-t border-gray-100">
+                            {navLinks.map((link) => {
+                                const isHash = link.href.startsWith("#");
+                                const Component = isHash ? "a" : Link;
+
+                                return (
+                                    <Component
+                                        key={link.name}
+                                        href={link.href}
+                                        onClick={() => setIsOpen(false)}
+                                        className="text-lg text-gray-800 font-medium hover:text-black transition-colors"
+                                        role="menuitem"
+                                    >
+                                        {link.name}
+                                    </Component>
+                                );
+                            })}
+                            <div className="flex items-center justify-between pt-6 border-t border-gray-100">
                                 <div className="flex items-center gap-6">
                                     <button aria-label="Tìm kiếm" className="text-gray-600 hover:text-black transition-colors">
                                         <Search className="w-6 h-6" strokeWidth={1.5} />

@@ -5,7 +5,8 @@
             "products": "Products",
             "courses": "Courses",
             "docs": "Docs",
-            "support": "Support"
+            "support": "Support",
+            "blog": "Blog"
         },
         "courses": {
             "title": "Drone Programming Courses",

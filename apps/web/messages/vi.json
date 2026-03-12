@@ -5,7 +5,8 @@
             "products": "Sản phẩm",
             "courses": "Khóa học",
             "docs": "Tài liệu",
-            "support": "Hỗ trợ"
+            "support": "Hỗ trợ",
+            "blog": "Tin tức"
         },
         "courses": {
             "title": "Khóa học lập trình Drone",
