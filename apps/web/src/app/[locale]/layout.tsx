@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
-import './globals.css'
+import '../globals.css'
 import NavigationBar from '@/components/NavigationBar'
 import FooterContact from '@/components/landing/FooterContact'
 import { NextIntlClientProvider } from 'next-intl'

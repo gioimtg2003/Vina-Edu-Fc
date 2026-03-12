@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Search, User, ShoppingCart } from "lucide-react";
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import LocaleSwitcher from "./LocaleSwitcher";
 
 export default function NavigationBar() {

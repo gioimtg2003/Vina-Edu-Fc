@@ -2,7 +2,7 @@
 
 import { motion, Variants } from "framer-motion";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 const fadeInUp: Variants = {
     hidden: { opacity: 0, y: 30 },
