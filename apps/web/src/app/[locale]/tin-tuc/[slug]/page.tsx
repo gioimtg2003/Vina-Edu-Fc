@@ -46,9 +46,9 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 }
 
 export async function generateStaticParams() {
-    return BLOG_POSTS.map((post) => ({
-        slug: post.id,
-    }));
+  return BLOG_POSTS.map((post) => ({
+    slug: post.id,
+  }));
 }
 
 export default async function BlogDetailPage({ params }: BlogPageProps) {
@@ -74,7 +74,7 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
     "author": [{
       "@type": "Person",
       "name": post.author,
-      "url": "https://vinauav.com" 
+      "url": "https://vinauav.com"
     }],
     "publisher": {
       "@type": "Organization",
