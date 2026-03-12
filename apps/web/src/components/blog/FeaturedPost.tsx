@@ -3,6 +3,7 @@
 import { BlogPost } from "@/types/blog";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { Link } from "@/i18n/routing";
 
 interface FeaturedPostProps {
   post: BlogPost;
@@ -62,16 +63,12 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
             {post.excerpt}
           </motion.p>
 
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            whileHover={{ scale: 1.05, backgroundColor: "#f8fafc" }}
-            whileTap={{ scale: 0.95 }}
-            className="px-10 py-4 bg-white text-slate-900 font-bold rounded-2xl transition-all shadow-xl active:scale-[0.98] inline-block"
+          <Link
+            href={`/tin-tuc/${post.id}`}
+            className="px-10 py-4 bg-white text-slate-900 font-bold rounded-2xl transition-all shadow-xl active:scale-[0.98] inline-block hover:bg-gray-50"
           >
             {"Đọc tiếp"}
-          </motion.button>
+          </Link>
         </div>
       </div>
     </motion.section>
