@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { MapPin, Wallet, CreditCard, Truck, ChevronRight, Check, ShieldCheck, User, Phone, Home } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
+import { Product } from "@/lib/products";
 
 interface Province {
     id_tinh: string;
@@ -32,7 +33,7 @@ const paymentMethods = [
     { id: "cod", name: "Thanh toán khi nhận hàng (COD)", icon: Truck },
 ];
 
-export default function CheckoutClient({ matchedProduct }: { matchedProduct: any }) {
+export default function CheckoutClient({ matchedProduct }: { matchedProduct: Product }) {
     const cartItems = matchedProduct ? [
         {
             id: matchedProduct.id,

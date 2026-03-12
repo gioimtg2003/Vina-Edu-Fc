@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { Link, useRouter } from "@/i18n/routing";
+import { Product } from "@/lib/products";
 import {
     Button,
     Breadcrumb,
@@ -29,7 +30,7 @@ import {
     TabsContent
 } from "@vinauav/ui";
 
-export default function ProductDetailClient({ matchedProduct, PRODUCTS }: { matchedProduct: any, PRODUCTS: any[] }) {
+export default function ProductDetailClient({ matchedProduct, PRODUCTS }: { matchedProduct: Product, PRODUCTS: Product[] }) {
     const router = useRouter();
 
     const formatVND = (amount: number) => {
@@ -257,7 +258,7 @@ export default function ProductDetailClient({ matchedProduct, PRODUCTS }: { matc
                                 <div className="max-w-4xl mx-auto">
                                     <h3 className="text-xl font-bold text-black mb-8 uppercase tracking-[0.2em] border-l-4 border-black pl-4">Thông số kỹ thuật</h3>
                                     <div className="bg-white border border-gray-100 divide-y divide-gray-100">
-                                        {matchedProduct.specs.map((spec: any, idx: number) => (
+                                        {matchedProduct.specs.map((spec: Product["specs"][number], idx: number) => (
                                             <div key={idx} className="flex justify-between items-center py-5 px-6 group hover:bg-gray-50 transition-colors">
                                                 <span className="text-gray-400 text-xs font-bold uppercase tracking-wider">{spec.label}</span>
                                                 <span className="text-black font-mono font-medium">{spec.value}</span>
