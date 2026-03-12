@@ -13,7 +13,7 @@ export const COURSES: Course[] = [
         ],
         duration: "4 buổi (3h/buổi)",
         viewCount: 100,
-        price: "Thương lượng",
+        price: "Liên hệ",
         content: "Phần 1: Tổng quan về linh kiện Drone. Phần 2: Kỹ năng hàn và lắp ráp. Phần 3: Cài đặt Firmware ArduPilot. Phần 4: Cấu hình và bay thử.",
         iconName: "Wrench"
     },
@@ -29,7 +29,7 @@ export const COURSES: Course[] = [
         ],
         duration: "8 buổi (3h/buổi)",
         viewCount: 100,
-        price: "Thương lượng",
+        price: "Liên hệ",
         content: "Nắm vững toán học đằng sau sự cân bằng. Lập trình từ zero-to-hero hệ thống bay cân bằng của riêng bạn.",
         iconName: "Cpu"
     },
@@ -45,7 +45,7 @@ export const COURSES: Course[] = [
         ],
         duration: "6 buổi (3h/buổi)",
         viewCount: 100,
-        price: "Thương lượng",
+        price: "Liên hệ",
         content: "Nâng cấp drone của bạn với khả năng giữ vị trí thông minh bằng cảm biến quang học.",
         iconName: "MapPin"
     },
@@ -61,7 +61,7 @@ export const COURSES: Course[] = [
         ],
         duration: "12 buổi (3h/buổi)",
         viewCount: 100,
-        price: "Thương lượng",
+        price: "Liên hệ",
         content: "Dành cho những người muốn trở thành kỹ sư UAV thực thụ. Xây dựng bộ não cho drone từ phần cứng đến phần mềm.",
         iconName: "GraduationCap"
     }
