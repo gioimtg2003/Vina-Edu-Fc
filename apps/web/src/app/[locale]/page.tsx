@@ -4,6 +4,8 @@ import HardwareProducts from "@/components/landing/HardwareProducts";
 import Documentation from "@/components/landing/Documentation";
 import { setRequestLocale } from "next-intl/server";
 
+export const runtime = 'edge';
+
 export default async function Home({
     params,
 }: {
