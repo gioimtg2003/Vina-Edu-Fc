@@ -6,6 +6,25 @@
             "courses": "Courses",
             "docs": "Docs",
             "support": "Support"
+        },
+        "courses": {
+            "title": "Drone Programming Courses",
+            "subtitle": "VinaUAV provides 1-on-1 practical courses, helping students and engineers master UAV systems from hardware to software algorithms.",
+            "view_details": "View Course Details",
+            "back_to_home": "Back to Home",
+            "what_will_you_learn": "What will you learn?",
+            "detailed_content": "Detailed Content",
+            "view_syllabus": "View Syllabus",
+            "enroll_now": "Enroll Now",
+            "cta_description": "1-on-1 online or in-studio practical courses. Flexible scheduling based on your timetable.",
+            "book_consultation": "Book a Consultation",
+            "student_discount": "10% discount for engineering students.",
+            "not_found": "Course Not Found",
+            "not_found_desc": "The course you are looking for does not exist or has been removed.",
+            "back_to_list": "Back to Course List",
+            "duration": "Duration",
+            "views": "views",
+            "price": "Price"
         }
     }
 }

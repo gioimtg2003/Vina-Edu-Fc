@@ -6,6 +6,25 @@
             "courses": "Khóa học",
             "docs": "Tài liệu",
             "support": "Hỗ trợ"
+        },
+        "courses": {
+            "title": "Khóa học lập trình Drone",
+            "subtitle": "VinaUAV cung cấp các khóa học thực hành 1 kèm 1, giúp sinh viên và kỹ sư nắm vững hệ thống UAV từ phần cứng đến thuật toán phần mềm.",
+            "view_details": "Xem chi tiết khóa học",
+            "back_to_home": "Quay lại trang chủ",
+            "what_will_you_learn": "Bạn sẽ học được gì?",
+            "detailed_content": "Nội dung chi tiết",
+            "view_syllabus": "Xem khung chương trình",
+            "enroll_now": "Đăng ký ngay",
+            "cta_description": "Khóa học 1 kèm 1 trực tuyến hoặc trực tiếp tại Studio. Linh hoạt thời gian theo lịch cá nhân.",
+            "book_consultation": "Đặt lịch tư vấn",
+            "student_discount": "Ưu đãi 10% cho sinh viên các trường kỹ thuật.",
+            "not_found": "Không tìm thấy khóa học",
+            "not_found_desc": "Khóa học bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
+            "back_to_list": "Quay lại danh sách khóa học",
+            "duration": "Thời lượng",
+            "views": "lượt xem",
+            "price": "Giá"
         }
     }
 }

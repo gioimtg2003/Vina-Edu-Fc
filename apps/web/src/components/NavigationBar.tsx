@@ -5,8 +5,10 @@ import { Menu, X, Search, User, ShoppingCart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "@/i18n/routing";
 import LocaleSwitcher from "./LocaleSwitcher";
+import { useTranslations } from "next-intl";
 
 export default function NavigationBar() {
+    const t = useTranslations("common.nav");
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
@@ -21,10 +23,10 @@ export default function NavigationBar() {
     }, []);
 
     const navLinks = [
-        { name: "Sản phẩm", href: "#products" },
-        { name: "Khóa học", href: "#courses" },
-        { name: "Tài liệu", href: "#docs" },
-        { name: "Hỗ trợ", href: "#support" },
+        { name: t("products"), href: "#products" },
+        { name: t("courses"), href: "#courses" },
+        { name: t("docs"), href: "#docs" },
+        { name: t("support"), href: "#support" },
     ];
 
     return (
