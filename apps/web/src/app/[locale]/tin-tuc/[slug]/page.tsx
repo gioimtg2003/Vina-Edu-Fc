@@ -1,4 +1,3 @@
-import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { BLOG_POSTS } from "@/lib/blog";
@@ -8,48 +7,49 @@ interface BlogPageProps {
   params: Promise<{ locale: string; slug: string }>;
 }
 
-export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const post = BLOG_POSTS.find((p) => p.id === slug);
+export const runtime = 'edge';
+// export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+//   const { slug } = await params;
+//   const post = BLOG_POSTS.find((p) => p.id === slug);
 
-  if (!post) {
-    return {
-      title: "Bài viết không tồn tại - VinaUAV",
-    };
-  }
+//   if (!post) {
+//     return {
+//       title: "Bài viết không tồn tại - VinaUAV",
+//     };
+//   }
 
-  return {
-    title: `${post.title} | VinaUAV Blog`,
-    description: post.excerpt,
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      type: "article",
-      publishedTime: post.date,
-      authors: [post.author],
-      images: [
-        {
-          url: post.coverImage,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt,
-      images: [post.coverImage],
-    },
-  };
-}
+//   return {
+//     title: `${post.title} | VinaUAV Blog`,
+//     description: post.excerpt,
+//     openGraph: {
+//       title: post.title,
+//       description: post.excerpt,
+//       type: "article",
+//       publishedTime: post.date,
+//       authors: [post.author],
+//       images: [
+//         {
+//           url: post.coverImage,
+//           width: 1200,
+//           height: 630,
+//           alt: post.title,
+//         },
+//       ],
+//     },
+//     twitter: {
+//       card: "summary_large_image",
+//       title: post.title,
+//       description: post.excerpt,
+//       images: [post.coverImage],
+//     },
+//   };
+// }
 
-export async function generateStaticParams() {
-  return BLOG_POSTS.map((post) => ({
-    slug: post.id,
-  }));
-}
+// export async function generateStaticParams() {
+//   return BLOG_POSTS.map((post) => ({
+//     slug: post.id,
+//   }));
+// }
 
 export default async function BlogDetailPage({ params }: BlogPageProps) {
   const { locale, slug } = await params;

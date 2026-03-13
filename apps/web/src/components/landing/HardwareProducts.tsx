@@ -49,7 +49,7 @@ export default function HardwareProducts() {
                                 <div className="h-[70%] w-full relative bg-slate-50 flex items-center justify-center p-8">
                                     <div className="relative w-full h-full transform group-hover:scale-110 transition-transform duration-700 ease-out">
                                         <Image
-                                            src="/fc_board.jpg"
+                                            src="/fc-board.png"
                                             alt={product.name}
                                             fill
                                             className="object-contain drop-shadow-xl"

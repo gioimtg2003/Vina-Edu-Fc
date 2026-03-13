@@ -28,7 +28,7 @@ export const PRODUCTS: Product[] = [
         ],
         price: "Mạch PCB: 250k | Hoàn thiện: 600k",
         basePrice: 600000,
-        image: "/fc_board.jpg",
+        image: "/fc-board.png",
     },
     {
         id: "vinafc-1-plus",
@@ -43,7 +43,7 @@ export const PRODUCTS: Product[] = [
         ],
         price: "Mạch PCB: 250k | Hoàn thiện: 700k",
         basePrice: 700000,
-        image: "/fc_board.jpg",
+        image: "/fc-board.png",
     },
     {
         id: "vinafc-1-pro",
@@ -58,6 +58,6 @@ export const PRODUCTS: Product[] = [
         ],
         price: "Hoàn thiện: 3.000.000 VNĐ",
         basePrice: 3000000,
-        image: "/fc_board.jpg",
+        image: "/fc-board.png",
     },
 ];

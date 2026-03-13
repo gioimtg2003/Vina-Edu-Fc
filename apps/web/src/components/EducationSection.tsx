@@ -75,7 +75,7 @@ export default function EducationSection() {
                                     className="block"
                                     animationStyle="top-in-bottom-out"
                                     videoSrc="/video1.mp4"
-                                    thumbnailSrc="/fc_board.jpg"
+                                    thumbnailSrc="/fc-board.png"
                                     thumbnailAlt="Demo video: Vina Edu FC ESP32 drone flight controller bay ổn định"
 
                                 />

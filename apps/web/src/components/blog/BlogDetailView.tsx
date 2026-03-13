@@ -67,7 +67,7 @@ export default function BlogDetailView({ post, relatedPosts }: BlogDetailViewPro
                 const button = document.createElement("button");
                 button.className = "copy-button absolute top-3 right-3 p-2 rounded-md bg-white/10 hover:bg-white/20 text-white/50 hover:text-white transition-all opacity-0 group-hover:opacity-100";
                 button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
-                
+
                 pre.style.position = "relative";
                 pre.classList.add("group");
                 pre.appendChild(button);
@@ -173,7 +173,7 @@ export default function BlogDetailView({ post, relatedPosts }: BlogDetailViewPro
                     className="relative w-full aspect-[21/9] rounded-none overflow-hidden mb-16 shadow-2xl"
                 >
                     <Image
-                        src={post.coverImage || "/fc_board.jpg"}
+                        src={post.coverImage || "/fc-board.png"}
                         alt={post.title}
                         fill
                         className="object-cover"
@@ -224,7 +224,7 @@ export default function BlogDetailView({ post, relatedPosts }: BlogDetailViewPro
                         <div className="mt-20 p-8 md:p-12 bg-slate-50 border border-slate-100 flex flex-col md:flex-row gap-8 items-center md:items-start text-center md:text-left transition-all hover:shadow-lg">
                             <div className="relative w-24 h-24 rounded-full overflow-hidden shrink-0 ring-4 ring-white shadow-md">
                                 <Image
-                                    src="/fc_board.jpg"
+                                    src="/fc-board.png"
                                     alt={post.author}
                                     fill
                                     className="object-cover"
@@ -330,7 +330,7 @@ export default function BlogDetailView({ post, relatedPosts }: BlogDetailViewPro
                             >
                                 <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
                                     <Image
-                                        src={post.coverImage || "/fc_board.jpg"}
+                                        src={post.coverImage || "/fc-board.png"}
                                         alt={post.title}
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"

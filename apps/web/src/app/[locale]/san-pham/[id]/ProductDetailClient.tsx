@@ -79,7 +79,7 @@ export default function ProductDetailClient({ matchedProduct, PRODUCTS }: { matc
                                     className={`relative w-20 h-20 rounded-sm border-2 overflow-hidden shrink-0 bg-white transition-all ${index === 0 ? 'border-primary ring-1 ring-primary' : 'border-transparent hover:border-gray-300'}`}
                                 >
                                     <Image
-                                        src="/fc_board.jpg"
+                                        src="/fc-board.png"
                                         alt={`Thumbnail ${index + 1}`}
                                         fill
                                         className="object-contain p-2 mix-blend-multiply"
@@ -96,7 +96,7 @@ export default function ProductDetailClient({ matchedProduct, PRODUCTS }: { matc
                                         <CarouselItem key={index}>
                                             <div className="relative w-full aspect-square flex items-center justify-center">
                                                 <Image
-                                                    src="/fc_board.jpg"
+                                                    src="/fc-board.png"
                                                     alt={`${matchedProduct.name} - Image ${index + 1}`}
                                                     fill
                                                     className="object-contain transition-transform duration-700 hover:scale-110"
@@ -244,7 +244,7 @@ export default function ProductDetailClient({ matchedProduct, PRODUCTS }: { matc
                                     </div>
                                     <div className="relative aspect-video bg-gray-100 rounded-none overflow-hidden group">
                                         <Image
-                                            src="/fc_board.jpg"
+                                            src="/fc-board.png"
                                             alt="Feature highlight"
                                             fill
                                             className="object-cover transition-transform duration-1000 group-hover:scale-105"
@@ -314,7 +314,7 @@ export default function ProductDetailClient({ matchedProduct, PRODUCTS }: { matc
                                 >
                                     <div className="aspect-square bg-white border border-gray-100 p-6 relative overflow-hidden flex items-center justify-center mb-4 transition-all group-hover:border-gray-200">
                                         <Image
-                                            src="/fc_board.jpg"
+                                            src="/fc-board.png"
                                             alt={product.name}
                                             fill
                                             className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
