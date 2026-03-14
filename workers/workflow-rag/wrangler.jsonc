@@ -1,0 +1,53 @@
+{
+    "$schema": "./node_modules/wrangler/config-schema.json",
+    "name": "workflow-rag",
+    "main": "src/index.ts",
+    "compatibility_date": "2026-03-09",
+    "observability": {
+        "enabled": true
+    },
+    // Static assets — serves the upload UI from ./public
+    "assets": {
+        "directory": "./public"
+    },
+    // Workers AI binding
+    "ai": {
+        "binding": "AI",
+        "remote": true
+    },
+    // R2 bucket for storing uploaded documents
+    // Create with: npx wrangler r2 bucket create rag-documents
+    "r2_buckets": [
+        {
+            "binding": "RAG_BUCKET",
+            "bucket_name": "rag-vinauav-preview",
+            "preview_bucket_name": "rag-vinauav-preview"
+        }
+    ],
+    // Vectorize vector database
+    // Create with: npx wrangler vectorize create tutorial-rag-index --dimensions=768 --metric=cosine
+    "vectorize": [
+        {
+            "binding": "VECTOR_INDEX",
+            "index_name": "vinauav-tech-docs"
+        }
+    ],
+    // D1 SQL database
+    // Create with: npx wrangler d1 create tutorial-rag-db
+    // Then replace the database_id below with the UUID returned
+    "d1_databases": [
+        {
+            "binding": "DB",
+            "database_name": "tutorial-rag-db",
+            "database_id": "7a28b645-540c-4fcf-91ca-252ee993c453"
+        }
+    ],
+    // Workflow definition
+    "workflows": [
+        {
+            "name": "rag-workflow",
+            "binding": "RAG_WORKFLOW",
+            "class_name": "InsertVectorWorkflow"
+        }
+    ]
+}
