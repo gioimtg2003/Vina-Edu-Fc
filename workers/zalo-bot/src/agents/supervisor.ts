@@ -45,10 +45,11 @@ export function createSupervisorAgent(env: Env, model: ChatCloudflareWorkersAI) 
                 }
             );
 
-            const supervisorModel = (model as any).bindTools([routeTool], { tool_choice: "route" });
-            const response = await supervisorModel.invoke([sysMsg, ...state.messages]);
+          const supervisorModel = model?.bindTools?.([routeTool], { tool_choice: "route" });
 
-            const toolCall = response.tool_calls?.[0];
+            const response = await supervisorModel?.invoke([sysMsg, ...state.messages]);
+            console.log(model?.bindTools)
+            const toolCall = response?.tool_calls?.[0];
             let next = "FINISH";
             if (toolCall?.args?.next) {
                 next = toolCall.args.next;

@@ -4,10 +4,10 @@ import { sendMessage } from './zalo';
 import type { WebhookResult } from './types';
 
 export const maxTextLength = 2000
-const app = new Hono<{ Bindings: Env & any }>();
+const app = new Hono<{ Bindings: Env }>();
 
 function isAuthorized(request: Request, secretToken: string): boolean {
-	const header = request.headers.get("X-Bot-Api-Secret-Token");
+	const header = request.header("X-Bot-Api-Secret-Token");
 	if (!header) return false;
 
 	// Timing-safe comparison to prevent timing attacks.
@@ -28,7 +28,7 @@ app.get('/', (c) => {
 app.post('/webhook', async (c) => {
 
 	if (!isAuthorized(c.req, "VinaUAV123")) {
-		console.warn("[auth] Unauthorized request from", c.req.headers.get("CF-Connecting-IP"));
+		console.warn("[auth] Unauthorized request from", c.req.header("CF-Connecting-IP"));
 		return c.json({ error: "Unauthorized" }, 401);
 	}
 
@@ -40,7 +40,6 @@ app.post('/webhook', async (c) => {
 	}
 
 	console.log(`[webhook] Received event: ${body.event_name} from chatId=${body.message?.chat?.id ?? "unknown"}`);
-
 	try {
 		await routeEvent(body, c.env);
 	} catch (err) {

@@ -13,4 +13,6 @@ interface Env {
 	GOOGLE_CLIENT_EMAIL: string;
 	GOOGLE_PRIVATE_KEY: string;
 	GOOGLE_CALENDAR_ID: string;
+
+	ZALO_BOT_TOKEN: string;
 }

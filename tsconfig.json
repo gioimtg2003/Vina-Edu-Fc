@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@vinafc/*": ["apps/*/src", "packages/*/src"],
+      "@vinauav/*": ["packages/*/src"]
+    }
+  },
+  "include": [
+    "apps/**/*",
+    "packages/**/*",
+    "workers/**/*"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/dist",
+    "**/build",
+    "**/.next",
+    "**/out",
+    "**/coverage"
+  ]
+}

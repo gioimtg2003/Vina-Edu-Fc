@@ -54,9 +54,12 @@ async function runMultiAgentGraph(
 ): Promise<string> {
     // 1. Initialise the LLM model binding.
     const model = new ChatCloudflareWorkersAI({
-        model: "@hf/thebloke/neural-chat-7b-v3-1-awq",
-        ai: env.AI,
-    } as any);
+        model: "@hf/nousresearch/hermes-2-pro-mistral-7b",
+        cloudflareAccountId: "bafcca4df59d0c1cbda770fbf0f3168d",
+      cloudflareApiToken: "B68UeDNGysY5Y_fBjO8il2Y30_CjYIEyBGuyfUja",
+
+
+    });
 
     // 2. Compile the Supervisor → Worker state graph.
     const graph = createSupervisorAgent(env, model);

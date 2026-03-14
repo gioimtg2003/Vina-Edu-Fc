@@ -1,4 +1,4 @@
-import type { Env, WebhookResult, EventName } from "./types";
+import type { WebhookResult, EventName } from "./types";
 import { handleTextMessage } from "./handlers/textMessage";
 import { handleImageMessage } from "./handlers/imageMessage";
 import { handleStickerMessage } from "./handlers/stickerMessage";
