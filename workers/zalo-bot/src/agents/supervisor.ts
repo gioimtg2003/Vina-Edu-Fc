@@ -22,25 +22,25 @@ export const AgentState = Annotation.Root({
 export function createSupervisorAgent(env: Env, model: ChatCloudflareWorkersAI) {
     const commerceAgent = createCommerceAgent(model, env.DB, env.SEPAY_BANK_ACC || "", env.SEPAY_BANK_NAME || "");
     const bookingAgent = createBookingAgent(model, env.GOOGLE_CLIENT_EMAIL || "", env.GOOGLE_PRIVATE_KEY || "", env.GOOGLE_CALENDAR_ID || "");
-    const techSupportAgent = createTechSupportAgent(model, env.TELEGRAM_BOT_TOKEN || "", env.ADMIN_CHAT_ID || "");
+    const techSupportAgent = createTechSupportAgent(model, env);
 
     const members = ["Commerce", "Booking", "TechSupport"] as const;
 
     const
         supervisorNode = async (state: typeof AgentState.State, _: any) => {
             const sysMsg = new SystemMessage(
-                "You are a supervisor managing a conversation between the user and the following workers: " +
-                members.join(", ") + ". Given the following user request, respond with the worker to act next. " +
-                "If the request has been fully resolved or you want to respond to the user, respond with FINISH."
+                "Bạn là một người giám sát quản lý cuộc trò chuyện giữa người dùng và các worker sau: " +
+                members.join(", ") + ". Dựa vào yêu cầu của người dùng, hãy chọn worker để tiếp tục. " +
+                "Nếu yêu cầu đã được giải quyết hoặc bạn muốn trả lời người dùng, hãy trả lời với FINISH."
             );
 
             const routeTool = tool(
                 async ({ next }) => { return `Routing to ${next}`; },
                 {
                     name: "route",
-                    description: "Select the next worker to route the user's request to.",
+                    description: "Chọn worker tiếp theo để tiếp tục.",
                     schema: z.object({
-                        next: z.enum(["Commerce", "Booking", "TechSupport", "FINISH"]).describe("The next worker to route to, or FINISH if done.")
+                        next: z.enum(["Commerce", "Booking", "TechSupport", "FINISH"]).describe("Worker tiếp theo, hoặc FINISH nếu đã giải quyết.")
                     })
                 }
             );
@@ -51,7 +51,7 @@ export function createSupervisorAgent(env: Env, model: ChatCloudflareWorkersAI) 
             const toolCall = response.tool_calls?.[0];
             let next = "FINISH";
             if (toolCall?.args?.next) {
-                next = toolCall.args.next; // will be Commerce, Booking, TechSupport, or FINISH
+                next = toolCall.args.next;
             }
 
             return { next };

@@ -8,14 +8,14 @@ export const createInventoryTools = (db: D1Database) => {
     const checkInventoryTool = tool(
         async ({ productName }) => {
             const item = await orm.getInventoryItem(productName);
-            if (!item) return `Product ${productName} not found in inventory.`;
-            return `Product ${item.name}: Stock = ${item.stock}, Price = $${item.price}. Description: ${item.description}`;
+            if (!item) return `Hàng hoá ${productName} không tồn tại trong kho.`;
+            return `Hàng hoá ${item.name}: Số lượng = ${item.stock}, Giá = $${item.price}. Mô tả: ${item.description}`;
         },
         {
             name: "check_inventory",
-            description: "Check if a product is in stock and get its price/details.",
+            description: "Kiểm tra số lượng hàng hoá và giá hàng hoá.",
             schema: z.object({
-                productName: z.string().describe("Name of the product to look up.")
+                productName: z.string().describe("Tên sản phẩm.")
             })
         }
     );
@@ -23,21 +23,21 @@ export const createInventoryTools = (db: D1Database) => {
     const placeOrderTool = tool(
         async ({ userId, productName, quantity }) => {
             const item = await orm.getInventoryItem(productName);
-            if (!item) return `Product ${productName} not found in inventory. Cannot place order.`;
+            if (!item) return `Hàng hoá ${productName} không tồn tại trong kho. Không thể đặt hàng.`;
             if (item.stock < quantity) {
-                return `Sorry, only ${item.stock} items available for ${item.name}.`;
+                return `Số lượng hàng hoá ${item.name} trong kho chỉ còn ${item.stock}. Không thể đặt hàng.`;
             }
 
             const orderId = await orm.createOrder(userId, item.id, quantity);
-            return `Successfully placed order for ${quantity}x ${item.name}. Order ID is ${orderId}. Totals $${item.price * quantity}.`;
+            return `Đặt hàng thành công ${quantity}x ${item.name}. Order ID là ${orderId}. Tổng tiền là $${item.price * quantity}.`;
         },
         {
             name: "place_order",
-            description: "Places an order for a product and records it in the database.",
+            description: "Đặt hàng cho khách hàng và ghi nhận vào database.",
             schema: z.object({
-                userId: z.string().describe("The ID of the user placing the order."),
-                productName: z.string().describe("Name of the product."),
-                quantity: z.number().describe("Amount to order.")
+                userId: z.string().describe("ID của khách hàng đặt hàng."),
+                productName: z.string().describe("Tên sản phẩm.",),
+                quantity: z.number().describe("Số lượng sản phẩm.")
             })
         }
     );

@@ -4,4 +4,13 @@ interface Env {
 	CHAT_CONTEXT: KVNamespace;
 	DB: D1Database;
 	AI: Ai;
+	VECTOR_INDEX: Vectorize;
+
+	SEPAY_BANK_ACC: string;
+	SEPAY_BANK_NAME: string;
+	TELEGRAM_BOT_TOKEN: string;
+	ADMIN_CHAT_ID: string;
+	GOOGLE_CLIENT_EMAIL: string;
+	GOOGLE_PRIVATE_KEY: string;
+	GOOGLE_CALENDAR_ID: string;
 }

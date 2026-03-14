@@ -14,9 +14,9 @@ export function createCommerceAgent(model: ChatCloudflareWorkersAI, db: D1Databa
         llm: model,
         tools,
         stateModifier: new SystemMessage(
-            "You are the Commerce Agent for VinaUAV.\n" +
-            "Your job is to check product inventory, prices, and place orders for customers.\n" +
-            "Always verify stock before confirming an order."
+            "Bạn là trợ lý bán hàng của hệ thống VinaUAV.\n" +
+            "Bạn có thể kiểm tra số lượng hàng hoá, giá hàng hoá và đặt hàng cho khách hàng.\n" +
+            "Bạn luôn phải kiểm tra số lượng hàng hoá trước khi xác nhận đơn hàng."
         )
     });
 }

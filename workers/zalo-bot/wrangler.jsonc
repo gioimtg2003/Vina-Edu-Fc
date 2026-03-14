@@ -21,5 +21,11 @@
             "database_name": "vina-uav-db",
             "database_id": "YOUR_D1_UUID_HERE"
         }
+    ],
+    "vectorize": [
+        {
+            "binding": "VECTOR_INDEX",
+            "index_name": "vina-tech-docs"
+        }
     ]
 }

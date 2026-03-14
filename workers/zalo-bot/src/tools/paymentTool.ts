@@ -15,16 +15,16 @@ export const createPaymentTool = (db: D1Database, bankAcc: string, bankName: str
             // Construct SePay URL
             const qrUrl = `https://qr.sepay.vn/img?acc=${bankAcc}&bank=${bankName}&amount=${amount}&des=${memo}`;
 
-            return `Payment order created. Order ID: ${orderId}\n` +
-                `Please provide this QR URL to the customer for payment: ${qrUrl}\n` +
-                `The transfer memo MUST BE EXACTLY: ${memo}`;
+            return `Đơn hàng thanh toán đã được tạo. Order ID: ${orderId}\n` +
+                `Vui lòng cung cấp QR URL này cho khách hàng thanh toán: ${qrUrl}\n` +
+                `Mã giao dịch phải EXACTLY: ${memo}`;
         },
         {
             name: "generate_payment_qr",
-            description: "Generates a SePay QR code for payment, creating a pending order in the database.",
+            description: "Tạo QR code để khách hàng thanh toán, tạo đơn hàng trong database.",
             schema: z.object({
-                chatId: z.string().describe("The chat ID or user ID placing the payment order."),
-                amount: z.number().describe("The exact amount the user has to pay in VND.")
+                chatId: z.string().describe("ID của khách hàng đặt hàng."),
+                amount: z.number().describe("Số tiền khách hàng phải trả.")
             })
         }
     );

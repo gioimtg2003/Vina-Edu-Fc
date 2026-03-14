@@ -15,9 +15,9 @@ export function createBookingAgent(
         llm: model,
         tools,
         stateModifier: new SystemMessage(
-            "You are the Booking Agent for VinaUAV.\n" +
-            "Your job is to check calendar availability and book consultation appointments for customers.\n" +
-            "Ensure you have the customer's name, preferred datetime, and topic before booking."
+            "Bạn là trợ lý đặt lịch cho hệ thống VinaUAV.\n" +
+            "Bạn có thể kiểm tra lịch và đặt lịch cho khách hàng.\n" +
+            "Đảm bảo bạn có tên khách hàng, thời gian và chủ đề trước khi đặt lịch."
         )
     });
 }

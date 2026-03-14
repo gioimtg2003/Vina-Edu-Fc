@@ -20,16 +20,16 @@ export const createGoogleCalendarTools = (clientEmail: string, privateKey: strin
                 const data = await response.json() as any;
 
                 const events = data.items || [];
-                if (events.length === 0) return "No events scheduled for this date. The entire day is available.";
+                if (events.length === 0) return "Không có sự kiện nào được đặt cho ngày này. Bạn có thể đặt lịch cho khách hàng.";
 
-                return `Found ${events.length} busy slots. Times: ${events.map((e: any) => e.start.dateTime || e.start.date).join(', ')}`;
+                return `Tìm thấy ${events.length} slot trống. Thời gian: ${events.map((e: any) => e.start.dateTime || e.start.date).join(', ')}`;
             } catch (e: any) {
                 return `Error checking availability: ${e.message}`;
             }
         },
         {
             name: "check_calendar_availability",
-            description: "Check the calendar to see if a specific date or time is available for a booking.",
+            description: "Kiểm tra lịch để xem có slot trống cho ngày hoặc thời gian nhất định.",
             schema: z.object({
                 date: z.string().describe("The date to check, in YYYY-MM-DD format.")
             })
@@ -61,18 +61,18 @@ export const createGoogleCalendarTools = (clientEmail: string, privateKey: strin
                 });
 
                 if (!response.ok) throw new Error("Failed to insert event");
-                return `Appointment successfully booked for ${customerName} at ${startTime.toISOString()}.`;
+                return `Đặt lịch thành công cho ${customerName} vào lúc ${startTime.toISOString()}.`;
             } catch (e: any) {
-                return `Error booking appointment: ${e.message}`;
+                return `Lỗi khi đặt lịch: ${e.message}`;
             }
         },
         {
             name: "book_appointment",
-            description: "Creates an event in the calendar to book an appointment.",
+            description: "Tạo sự kiện trong lịch để đặt lịch cho khách hàng.",
             schema: z.object({
-                datetime: z.string().describe("The ISO 8601 string of the start time."),
-                description: z.string().describe("Details about the consultation."),
-                customerName: z.string().describe("Name of the customer.")
+                datetime: z.string().describe("ISO 8601 string of start time."),
+                description: z.string().describe("Chi tiết về cuộc tư vấn."),
+                customerName: z.string().describe("Tên khách hàng.")
             })
         }
     );
