@@ -80,7 +80,7 @@ This loop executes **autonomously within each worker agent** until the agent pro
 | Parameter          | Value                                                                              |
 | ------------------ | ---------------------------------------------------------------------------------- |
 | **Binding**        | `CHAT_CONTEXT`                                                                     |
-| **Key Pattern**    | `thread:{userId}`                                                                  |
+| **Key Pattern**    | `thread:{chatId}`                                                                  |
 | **Value Schema**   | `Array<{ type: "human" \| "ai", content: string }>`                                |
 | **TTL**            | `1800s` (30 minutes sliding window)                                                |
 | **Context Window** | Last 10 messages retained per thread                                               |
@@ -211,7 +211,7 @@ Always verify stock before confirming an order.
 
 **Behavioral constraints:**
 - Must call `check_inventory` before `place_order` — validates stock availability.
-- Generates SePay VietQR payment links via `generate_payment_qr` for bank transfers.
+- Generates SePay payment links via `generate_payment_qr` for bank transfers.
 - Returns structured order confirmation with `VNAFC_` prefixed memo codes.
 
 #### Data Flow
@@ -221,7 +221,7 @@ User: "I want to buy a Pro board"
   │
   ├─▶ check_inventory("Pro board")
   │     └─▶ D1 SELECT * FROM inventory WHERE name LIKE '%Pro board%'
-  │     └─▶ Returns: "Product VinaFC Pro: Stock = 15, Price = $45"
+  │     └─▶ Returns: "Product VinaFC Pro: Stock = 15, Price = 300000"
   │
   ├─▶ place_order(userId, "VinaFC Pro", 1)
   │     └─▶ D1 INSERT INTO orders_legacy (...)
@@ -348,7 +348,7 @@ All tools are defined using LangChain's `tool()` function with Zod-validated sch
 | ----------------------------- | ------------ | ----------------------------------------- | ------------------------- | ------------------ |
 | `send_telegram_notification`  | TechSupport  | `{ message: string, chatId: string }`     | Success/failure status    | Telegram Bot API   |
 
-### 3.4 VietQR Payment Pipeline (SePay Integration)
+### 3.4 Payment Pipeline (SePay Integration)
 
 The payment system is a two-phase asynchronous flow:
 
