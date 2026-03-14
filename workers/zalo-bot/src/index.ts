@@ -1,62 +1,54 @@
 import { Hono } from 'hono';
-import { ChatCloudflareWorkersAI } from '@langchain/cloudflare';
-import { createSupervisorAgent } from './agents/supervisor';
-import { HumanMessage, AIMessage } from '@langchain/core/messages';
+import { routeEvent } from './router';
 import { sendMessage } from './zalo';
+import type { WebhookResult } from './types';
 
+export const maxTextLength = 2000
 const app = new Hono<{ Bindings: Env & any }>();
+
+function isAuthorized(request: Request, secretToken: string): boolean {
+	const header = request.headers.get("X-Bot-Api-Secret-Token");
+	if (!header) return false;
+
+	// Timing-safe comparison to prevent timing attacks.
+	if (header.length !== secretToken.length) return false;
+
+	let result = 0;
+	for (let i = 0; i < header.length; i++) {
+		result |= header.charCodeAt(i) ^ secretToken.charCodeAt(i);
+	}
+	return result === 0;
+}
+
 
 app.get('/', (c) => {
 	return c.text('VinaUAV Multi-Agent Bot Architecture is Active!');
 });
 
 app.post('/webhook', async (c) => {
-	const body = await c.req.json();
-	const userId = body.userId || body.message?.chat?.id || "default_user";
-	const userMessage = body.text || body.message?.text || "";
 
-	if (!userMessage) return c.json({ error: "No message found" }, 400);
+	if (!isAuthorized(c.req, "VinaUAV123")) {
+		console.warn("[auth] Unauthorized request from", c.req.headers.get("CF-Connecting-IP"));
+		return c.json({ error: "Unauthorized" }, 401);
+	}
 
-	// Initialize Workers AI Model
-	const model = new ChatCloudflareWorkersAI({
-		model: "@hf/thebloke/neural-chat-7b-v3-1-awq", // Standard CF Workers AI model, can adjust
-		ai: c.env.AI
-	} as any);
+	const body = await c.req.json() as WebhookResult;
 
-	// Compile our Multi-Agent state graph
-	const graph = createSupervisorAgent(c.env, model);
+	if (!body.event_name) {
+		console.warn("[router] Missing event_name in payload, skipping.");
+		return c.json({ ok: true, message: "Skipped: no event_name" }, 200);
+	}
 
-	// Retrieve thread state from KV
-	const threadKey = `thread:${userId}`;
-	const storedState = await c.env.CHAT_CONTEXT.get(threadKey, "json") as any[] || [];
+	console.log(`[webhook] Received event: ${body.event_name} from chatId=${body.message?.chat?.id ?? "unknown"}`);
 
-	// Reconstruct conversation history
-	const messages = storedState.map(msg =>
-		msg.type === 'human' ? new HumanMessage(msg.content) : new AIMessage(msg.content)
-	);
-	messages.push(new HumanMessage(userMessage));
+	try {
+		await routeEvent(body, c.env);
+	} catch (err) {
+		console.error("[webhook] Error processing event:", err);
+		return c.json({ ok: false, error: "Internal processing error" }, 500);
+	}
 
-	// Invoke the autonomous LangGraph agentic loop
-	const result = await graph.invoke(
-		{ messages },
-		{ configurable: { thread_id: userId } }
-	);
-
-	const outMessages = result.messages;
-	const finalMsg = outMessages[outMessages.length - 1];
-
-	// Persist thread state back to KV (keep context window small by retaining last 10 messages)
-	const messagesToSave = outMessages.map((m: any) => ({
-		type: m._getType(),
-		content: m.content
-	})).slice(-10);
-
-	await c.env.CHAT_CONTEXT.put(threadKey, JSON.stringify(messagesToSave));
-
-	return c.json({
-		response: finalMsg.content,
-		threadId: userId
-	});
+	return c.json({ ok: true });
 });
 
 app.post('/payment', async (c) => {

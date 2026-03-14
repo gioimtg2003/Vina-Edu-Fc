@@ -1,6 +1,9 @@
 import { maxTextLength } from "..";
-import type { WebhookMessage, ChatMessage, ChatContext } from "../types";
+import type { WebhookMessage, ChatContext, ChatMessage } from "../types";
 import { sendMessage } from "../zalo";
+import { ChatCloudflareWorkersAI } from "@langchain/cloudflare";
+import { createSupervisorAgent } from "../agents/supervisor";
+import { HumanMessage, AIMessage } from "@langchain/core/messages";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
@@ -8,9 +11,6 @@ import { sendMessage } from "../zalo";
 
 const KV_TTL_SECONDS = 1800; // 30 minutes
 const MAX_CONTEXT_MESSAGES = 10;
-const AI_MODEL = "@cf/meta/llama-3-8b-instruct" as const;
-const SYSTEM_PROMPT =
-    "Bạn là trợ lý ảo của Giới Đzai. Hãy trả lời lại những câu vui đùa ngắn gọn, hài hước, thân thiện và bằng tiếng Việt và hậu tố thường có ':))'. Lưu ý: bạn chỉ trả lời hài hước theo phong cách miền Nam của Việt Nam";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // KV Helpers
@@ -39,26 +39,49 @@ function applyWindowLimit(messages: ChatMessage[], limit: number): ChatMessage[]
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// AI Helper
+// Multi-Agent Graph Helper
 // ─────────────────────────────────────────────────────────────────────────────
 
-async function runAI(
-    ai: Ai,
-    messages: ChatMessage[]
+/**
+ * Invokes the LangGraph multi-agent supervisor graph and returns the
+ * final AI response string.
+ */
+async function runMultiAgentGraph(
+    env: Env,
+    contextMessages: ChatMessage[],
+    userText: string,
+    threadId: string
 ): Promise<string> {
-    const prompt: RoleScopedChatInput[] = [
-        { role: "system", content: SYSTEM_PROMPT },
-        ...messages.map((m) => ({ role: m.role, content: m.content })),
-    ];
+    // 1. Initialise the LLM model binding.
+    const model = new ChatCloudflareWorkersAI({
+        model: "@hf/thebloke/neural-chat-7b-v3-1-awq",
+        ai: env.AI,
+    } as any);
 
-    const response = await ai.run(AI_MODEL, { messages: prompt });
+    // 2. Compile the Supervisor → Worker state graph.
+    const graph = createSupervisorAgent(env, model);
 
-    // Workers AI returns { response: string } for chat models.
-    if (typeof response === "object" && response !== null && "response" in response) {
-        return String((response as { response: string }).response).trim();
-    }
+    // 3. Reconstruct LangChain message history from KV context.
+    const langchainMessages = contextMessages.map((m) =>
+        m.role === "user"
+            ? new HumanMessage(m.content)
+            : new AIMessage(m.content)
+    );
+    langchainMessages.push(new HumanMessage(userText));
 
-    throw new Error("Unexpected AI response shape");
+    // 4. Invoke the autonomous agentic loop.
+    const result = await graph.invoke(
+        { messages: langchainMessages },
+        { configurable: { thread_id: threadId } }
+    );
+
+    // 5. Extract the final message from the graph output.
+    const outMessages = result.messages;
+    const finalMsg = outMessages[outMessages.length - 1];
+
+    return typeof finalMsg.content === "string"
+        ? finalMsg.content
+        : JSON.stringify(finalMsg.content);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -87,9 +110,9 @@ export async function handleTextMessage(
     // 4. Persist user turn immediately (fail-safe: AI may error, context is saved).
     await saveContext(env.CHAT_CONTEXT, context);
 
-    // 5. Call Cloudflare Workers AI.
-    const aiReply = await runAI(env.AI, context.messages);
-    console.log(`[textMessage] AI reply for chatId=${chatId}: "${aiReply}"`);
+    // 5. Invoke the LangGraph multi-agent supervisor graph.
+    const aiReply = await runMultiAgentGraph(env, context.messages, userText, chatId);
+    console.log(`[textMessage] Agent reply for chatId=${chatId}: "${aiReply}"`);
 
     // 6. Append the assistant reply and apply sliding window again.
     context.messages.push({ role: "assistant", content: aiReply });
@@ -99,6 +122,7 @@ export async function handleTextMessage(
     // 7. Persist final context.
     await saveContext(env.CHAT_CONTEXT, context);
 
+    // 8. Send the response to the user via Zalo, chunking if necessary.
     let remainingText = aiReply;
 
     while (remainingText.length > 0) {
