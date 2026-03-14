@@ -25,7 +25,7 @@
     "vectorize": [
         {
             "binding": "VECTOR_INDEX",
-            "index_name": "vina-tech-docs"
+            "index_name": "vinauav-tech-docs"
         }
     ]
 }
