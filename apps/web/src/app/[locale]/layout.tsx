@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google'
 import '../globals.css'
 import NavigationBar from '@/components/NavigationBar'
 import FooterContact from '@/components/landing/FooterContact'
+import ZaloAssistantButton from '@/components/ZaloAssistantButton'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -90,6 +91,7 @@ export default async function RootLayout({
                         <NavigationBar />
                         {children}
                         <FooterContact />
+                        <ZaloAssistantButton />
                     </main>
                 </NextIntlClientProvider>
             </body>
