@@ -19,7 +19,7 @@
         {
             "binding": "DB",
             "database_name": "vina-uav-db",
-            "database_id": "YOUR_D1_UUID_HERE"
+            "database_id": "dec0dccb-5c94-4540-a017-2f25942feaf7"
         }
     ],
     "vectorize": [
