@@ -1,7 +1,4 @@
-import { maxTextLength } from "..";
-import type { WebhookMessage, ChatContext, ChatMessage } from "../types";
 import { sendMessage } from "../zalo";
-import { ChatCloudflareWorkersAI } from "@langchain/cloudflare";
 import { createSupervisorAgent } from "../agents/supervisor";
 import { HumanMessage, AIMessage } from "@langchain/core/messages";
 
@@ -52,17 +49,9 @@ async function runMultiAgentGraph(
     userText: string,
     threadId: string
 ): Promise<string> {
-    // 1. Initialise the LLM model binding.
-    const model = new ChatCloudflareWorkersAI({
-        model: "@hf/nousresearch/hermes-2-pro-mistral-7b",
-        cloudflareAccountId: "bafcca4df59d0c1cbda770fbf0f3168d",
-      cloudflareApiToken: "B68UeDNGysY5Y_fBjO8il2Y30_CjYIEyBGuyfUja",
-
-
-    });
 
     // 2. Compile the Supervisor → Worker state graph.
-    const graph = createSupervisorAgent(env, model);
+    const graph = await createSupervisorAgent(env);
 
     // 3. Reconstruct LangChain message history from KV context.
     const langchainMessages = contextMessages.map((m) =>
@@ -70,10 +59,12 @@ async function runMultiAgentGraph(
             ? new HumanMessage(m.content)
             : new AIMessage(m.content)
     );
+
+    console.log(graph);
     langchainMessages.push(new HumanMessage(userText));
 
     // 4. Invoke the autonomous agentic loop.
-    const result = await graph.invoke(
+    const result = await graph?.invoke(
         { messages: langchainMessages },
         { configurable: { thread_id: threadId } }
     );
@@ -131,7 +122,7 @@ export async function handleTextMessage(
     while (remainingText.length > 0) {
         let chunk = "";
 
-        if (remainingText.length > maxTextLength) {
+        if (remainingText.length > 2000) {
             let cutAt = remainingText.lastIndexOf('\n', maxTextLength);
 
             if (cutAt < maxTextLength / 2) {

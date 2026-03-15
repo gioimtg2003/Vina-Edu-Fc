@@ -1,9 +1,9 @@
 import type { WebhookResult, EventName } from "./types";
-import { handleTextMessage } from "./handlers/textMessage";
 import { handleImageMessage } from "./handlers/imageMessage";
 import { handleStickerMessage } from "./handlers/stickerMessage";
 import { handleUnsupportedMessage } from "./handlers/unsupportedMessage";
 import { sendChatAction } from "./zalo";
+import { _handleTextMessage } from "./handlers/_textMessage";
 
 /**
  * Routes an incoming webhook result to the appropriate event handler
@@ -18,7 +18,7 @@ export async function routeEvent(result: WebhookResult, env: Env): Promise<void>
     })
     switch (event) {
         case "message.text.received":
-            await handleTextMessage(message, env);
+            await _handleTextMessage(message, env);
             break;
 
         case "message.image.received":

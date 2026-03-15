@@ -1,9 +1,9 @@
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { ChatCloudflareWorkersAI } from "@langchain/cloudflare";
 import { createTelegramTool, createRagTool } from "../tools";
 import { SystemMessage } from "@langchain/core/messages";
+import { ChatGoogle } from "@langchain/google/node";
 
-export function createTechSupportAgent(model: ChatCloudflareWorkersAI, env: Env) {
+export function createTechSupportAgent(model: ChatGoogle, env: Env) {
     const tools = [
         createRagTool(env.AI, env.VECTOR_INDEX),
         createTelegramTool(env.TELEGRAM_BOT_TOKEN, env.ADMIN_CHAT_ID),

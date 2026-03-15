@@ -1,9 +1,12 @@
+
 import { Hono } from 'hono';
 import { routeEvent } from './router';
 import { sendMessage } from './zalo';
 import type { WebhookResult } from './types';
 
-export const maxTextLength = 2000
+export const maxTextLength = 2000;
+export const EMBEEDING_MODEL = "@cf/baai/bge-m3";
+
 const app = new Hono<{ Bindings: Env }>();
 
 function isAuthorized(request: Request, secretToken: string): boolean {

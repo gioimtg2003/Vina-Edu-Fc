@@ -14,9 +14,12 @@
         "wrangler": "^3.109.2"
     },
     "dependencies": {
+        "@cloudflare/ai-utils": "^1.0.1",
         "@langchain/cloudflare": "^1.0.4",
         "@langchain/community": "^1.1.22",
         "@langchain/core": "^1.1.31",
+        "@langchain/google": "^0.1.6",
+        "@langchain/google-genai": "^2.1.25",
         "@langchain/langgraph": "^1.2.1",
         "hono": "^4.12.5",
         "jose": "^6.2.1",

@@ -1,6 +1,6 @@
 import { StateGraph, START, END, MemorySaver, Annotation } from "@langchain/langgraph";
 import { BaseMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
-import { ChatCloudflareWorkersAI } from "@langchain/cloudflare";
+import { ChatGoogle } from "@langchain/google";
 import { z } from "zod";
 import { tool } from "@langchain/core/tools";
 
@@ -19,7 +19,18 @@ export const AgentState = Annotation.Root({
     })
 });
 
-export function createSupervisorAgent(env: Env, model: ChatCloudflareWorkersAI) {
+export async function createSupervisorAgent(env: Env) {
+    const model = new ChatGoogle({model: 'gemini-flash-lite-latest', apiKey: 'AIzaSyDBfcbWbWLNUZkBsSA14lxBcX2mCubxtM4', temperature: 0,
+        maxRetries: 2, });
+
+    const aiMsg = await model.invoke([
+        [
+            "system",
+            "You are a helpful assistant that translates English to French. Translate the user sentence.",
+        ],
+        ["human", "I love programming."],
+    ])
+    console.log(aiMsg)
     const commerceAgent = createCommerceAgent(model, env.DB, env.SEPAY_BANK_ACC || "", env.SEPAY_BANK_NAME || "");
     const bookingAgent = createBookingAgent(model, env.GOOGLE_CLIENT_EMAIL || "", env.GOOGLE_PRIVATE_KEY || "", env.GOOGLE_CALENDAR_ID || "");
     const techSupportAgent = createTechSupportAgent(model, env);
@@ -46,7 +57,6 @@ export function createSupervisorAgent(env: Env, model: ChatCloudflareWorkersAI) 
             );
 
           const supervisorModel = model?.bindTools?.([routeTool], { tool_choice: "route" });
-
             const response = await supervisorModel?.invoke([sysMsg, ...state.messages]);
             console.log(model?.bindTools)
             const toolCall = response?.tool_calls?.[0];

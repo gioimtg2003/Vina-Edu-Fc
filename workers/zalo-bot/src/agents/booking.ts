@@ -1,10 +1,10 @@
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { ChatCloudflareWorkersAI } from "@langchain/cloudflare";
 import { createGoogleCalendarTools } from "../tools";
 import { SystemMessage } from "@langchain/core/messages";
+import { ChatGoogle } from "@langchain/google/node";
 
 export function createBookingAgent(
-    model: ChatCloudflareWorkersAI,
+    model: ChatGoogle,
     clientEmail: string,
     privateKey: string,
     calendarId: string

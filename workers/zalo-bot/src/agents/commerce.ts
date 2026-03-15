@@ -1,10 +1,10 @@
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { ChatCloudflareWorkersAI } from "@langchain/cloudflare";
 import { createInventoryTools } from "../tools";
 import { createPaymentTool } from "../tools/paymentTool";
 import { SystemMessage } from "@langchain/core/messages";
+import { ChatGoogle } from "@langchain/google/node";
 
-export function createCommerceAgent(model: ChatCloudflareWorkersAI, db: D1Database, bankAcc: string, bankName: string) {
+export function createCommerceAgent(model: ChatGoogle, db: D1Database, bankAcc: string, bankName: string) {
     const tools = [
         ...createInventoryTools(db),
         ...createPaymentTool(db, bankAcc, bankName)
