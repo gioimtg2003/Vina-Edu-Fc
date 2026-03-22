@@ -151,7 +151,6 @@ export default function ProductDetailClient({ matchedProduct, PRODUCTS }: { matc
                                 <div className="grid grid-cols-1 gap-3">
                                     {[
                                         { id: 'standard', name: matchedProduct.name, price: matchedProduct.basePrice, desc: 'Bản cơ bản đầy đủ phụ kiện' },
-                                        { id: 'combo', name: `${matchedProduct.name} Combo`, price: matchedProduct.basePrice * 1.4, desc: 'Bao gồm thêm 3 pin & trạm sạc' }
                                     ].map((variant, i) => (
                                         <button
                                             key={variant.id}
