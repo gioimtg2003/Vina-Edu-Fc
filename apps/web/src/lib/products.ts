@@ -27,7 +27,7 @@ export const PRODUCTS: Product[] = [
             { label: "Ngoại vi", value: "2 cổng UART, hỗ trợ phần cứng GPS và Optical Flow (MTF01/MAVLink APM)" },
         ],
         price: "Mạch PCB: 250k | Hoàn thiện: 600k",
-        basePrice: 600000,
+        basePrice: 1000000,
         image: "/fc-board.png",
     },
     {
@@ -42,7 +42,7 @@ export const PRODUCTS: Product[] = [
             { label: "Ngoại vi", value: "2 cổng UART, hỗ trợ phần cứng GPS và Optical Flow" },
         ],
         price: "Mạch PCB: 250k | Hoàn thiện: 700k",
-        basePrice: 700000,
+        basePrice: 1200000,
         image: "/fc-board.png",
     },
     {
